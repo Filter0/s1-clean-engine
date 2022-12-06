@@ -10,7 +10,7 @@ Sonic_Hurt:	; Routine 4
 		subi.w	#$20,obVelY(a0)
 
 loc_1380C:
-		bsr.w	Sonic_HurtStop
+		bsr.s	Sonic_HurtStop
 		bsr.w	Sonic_LevelBound
 		bsr.w	Sonic_RecordPosition
 		bsr.w	Sonic_Animate
@@ -41,7 +41,7 @@ Sonic_HurtStop:
 		move.w	#$78,$30(a0)
 
 locret_13860:
-		rts	
+		rts
 ; End of function Sonic_HurtStop
 
 ; ---------------------------------------------------------------------------
@@ -49,7 +49,7 @@ locret_13860:
 ; ---------------------------------------------------------------------------
 
 Sonic_Death:	; Routine 6
-		bsr.w	GameOver
+		bsr.s	GameOver
 		jsr	(ObjectFall).l
 		bsr.w	Sonic_RecordPosition
 		bsr.w	Sonic_Animate
@@ -63,7 +63,7 @@ GameOver:
 		move.w	(v_limitbtm2).w,d0
 		addi.w	#$100,d0
 		cmp.w	obY(a0),d0
-		bcc.w	locret_13900
+		bge.s	locret_13900
 		move.w	#-$38,obVelY(a0)
 		addq.b	#2,obRoutine(a0)
 		clr.b	(f_timecount).w	; stop time counter
@@ -79,7 +79,7 @@ GameOver:
 loc_138C2:
 		move.w	#bgm_GameOver,d0
 		jsr	(PlaySound).l	; play game over music
-		moveq	#3,d0
+		moveq	#plcid_GameOver,d0
 		jmp	(AddPLC).l	; load game over patterns
 ; ===========================================================================
 
@@ -96,7 +96,7 @@ loc_138D4:
 ; ===========================================================================
 
 locret_13900:
-		rts	
+		rts
 ; End of function GameOver
 
 ; ---------------------------------------------------------------------------
@@ -111,4 +111,4 @@ Sonic_ResetLevel:; Routine 8
 		move.w	#1,(f_restart).w ; restart the level
 
 	locret_13914:
-		rts	
+		rts

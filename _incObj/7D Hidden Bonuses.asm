@@ -5,11 +5,10 @@
 HiddenBonus:
 		moveq	#0,d0
 		move.b	obRoutine(a0),d0
-		move.w	Bonus_Index(pc,d0.w),d1
-		jmp	Bonus_Index(pc,d1.w)
+		jmp	Bonus_Index(pc,d0.w)
 ; ===========================================================================
-Bonus_Index:	dc.w Bonus_Main-Bonus_Index
-		dc.w Bonus_Display-Bonus_Index
+Bonus_Index:	bra.w   Bonus_Main
+		bra.w   Bonus_Display
 
 bonus_timelen:	equ $30		; length of time to display bonus sprites
 ; ===========================================================================
@@ -33,7 +32,7 @@ Bonus_Main:	; Routine 0
 		bne.s	@chkdel
 		tst.b	(f_bigring).w
 		bne.s	@chkdel
-		addq.b	#2,obRoutine(a0)
+		addq.b	#4,obRoutine(a0)
 		move.l	#Map_Bonus,obMap(a0)
 		move.w	#$84B6,obGfx(a0)
 		ori.b	#4,obRender(a0)

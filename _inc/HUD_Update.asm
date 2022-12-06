@@ -81,10 +81,10 @@ HUD_Update:
 		bsr.w	Hud_TimeRingBonus
 		moveq	#0,d1
 		move.w	(v_ringbonus).w,d1 ; load ring bonus
-		bsr.w	Hud_TimeRingBonus
+		bra.w	Hud_TimeRingBonus
 
 	@finish:
-		rts	
+		rts
 ; ===========================================================================
 
 TimeOver:
@@ -93,7 +93,7 @@ TimeOver:
 		movea.l	a0,a2
 		bsr.w	KillSonic
 		move.b	#1,(f_timeover).w
-		rts	
+		rts
 ; ===========================================================================
 
 HudDebug:
@@ -130,10 +130,10 @@ HudDebug:
 		bsr.w	Hud_TimeRingBonus
 		moveq	#0,d1
 		move.w	(v_ringbonus).w,d1 ; load ring bonus
-		bsr.w	Hud_TimeRingBonus
+		bra.w	Hud_TimeRingBonus
 
 	@finish:
-		rts	
+		rts
 ; End of function HUD_Update
 
 ; ---------------------------------------------------------------------------
@@ -162,13 +162,13 @@ Hud_Base:
 		bsr.w	Hud_Lives
 		locVRAM	$DC40
 		lea	Hud_TilesBase(pc),a2
-		move.w	#$E,d2
+		moveq	#$E,d2
 
 loc_1C83E:
 		lea	Art_Hud(pc),a1
 
 loc_1C842:
-		move.w	#$F,d1
+		moveq	#$F,d1
 		move.b	(a2)+,d0
 		bmi.s	loc_1C85E
 		ext.w	d0
@@ -182,7 +182,7 @@ loc_1C852:
 loc_1C858:
 		dbf	d2,loc_1C842
 
-		rts	
+		rts
 ; ===========================================================================
 
 loc_1C85E:
@@ -243,7 +243,7 @@ loc_1C8B2:
 		swap	d1
 		dbf	d6,HudDb_XYLoop	; repeat 7 more	times
 
-		rts	
+		rts
 ; End of function HudDb_XY2
 
 ; ---------------------------------------------------------------------------
@@ -254,7 +254,7 @@ loc_1C8B2:
 
 
 Hud_Rings:
-		lea	(Hud_100).l,a2
+		lea	Hud_100(pc),a2
 		moveq	#2,d6
 		bra.s	Hud_LoadArt
 ; End of function Hud_Rings
@@ -267,7 +267,7 @@ Hud_Rings:
 
 
 Hud_Score:
-		lea	(Hud_100000).l,a2
+		lea	Hud_100000(pc),a2
 		moveq	#5,d6
 
 Hud_LoadArt:
@@ -289,7 +289,7 @@ loc_1C8F4:
 		add.l	d3,d1
 		tst.w	d2
 		beq.s	loc_1C8FE
-		move.w	#1,d4
+		moveq	#1,d4
 
 loc_1C8FE:
 		tst.w	d4
@@ -318,6 +318,6 @@ loc_1C92C:
 		addi.l	#$400000,d0
 		dbf	d6,Hud_ScoreLoop
 
-		rts	
+		rts
 
 ; End of function Hud_Score

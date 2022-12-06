@@ -18,11 +18,7 @@ Sonic_SlopeResist:
 		beq.s	locret_13508
 		bmi.s	loc_13504
 		tst.w	d0
-		beq.s	locret_13502
-		add.w	d0,obInertia(a0) ; change Sonic's inertia
-
-locret_13502:
-		rts	
+		beq.s	locret_13508	
 ; ===========================================================================
 
 loc_13504:

@@ -100,8 +100,7 @@ Swing_SetSolid:	; Routine 2
 		bsr.w	Swing_Solid
 
 Swing_Action:	; Routine $C
-		bsr.w	Swing_Move
-		bsr.w	DisplaySprite
+		bsr.s	Swing_Move
 		bra.w	Swing_ChkDel
 ; ===========================================================================
 
@@ -110,11 +109,10 @@ Swing_Action2:	; Routine 4
 		move.b	obActWid(a0),d1
 		bsr.w	ExitPlatform
 		move.w	obX(a0),-(sp)
-		bsr.w	Swing_Move
+		bsr.s	Swing_Move
 		move.w	(sp)+,d2
 		moveq	#0,d3
 		move.b	obHeight(a0),d3
 		addq.b	#1,d3
 		bsr.w	MvSonicOnPtfm
-		bsr.w	DisplaySprite
 		bra.w	Swing_ChkDel

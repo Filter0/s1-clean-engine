@@ -48,7 +48,7 @@ Moto_Action:	; Routine 2
 		move.b	ob2ndRout(a0),d0
 		move.w	Moto_ActIndex(pc,d0.w),d1
 		jsr	Moto_ActIndex(pc,d1.w)
-		lea	(Ani_Moto).l,a1
+		lea	Ani_Moto(pc),a1
 		bsr.w	AnimateSprite
 
 		include	"_incObj\sub RememberState.asm" ; Moto_Action terminates in this file
@@ -72,7 +72,7 @@ Moto_ActIndex:	dc.w @move-Moto_ActIndex
 		neg.w	obVelX(a0)	; change direction
 
 	@wait:
-		rts	
+		rts
 ; ===========================================================================
 
 @findfloor:
@@ -95,18 +95,18 @@ Moto_ActIndex:	dc.w @move-Moto_ActIndex
 		move.b	#2,obAnim(a1)
 
 	@nosmoke:
-		rts	
+		rts
 
 @pause:
 		subq.b	#2,ob2ndRout(a0)
 		move.w	#59,@time(a0)	; set pause time to 1 second
 		move.w	#0,obVelX(a0)	; stop the object moving
 		move.b	#0,obAnim(a0)
-		rts	
+		rts
 ; ===========================================================================
 
 Moto_Animate:	; Routine 4
-		lea	(Ani_Moto).l,a1
+		lea	Ani_Moto(pc),a1
 		bsr.w	AnimateSprite
 		bra.w	DisplaySprite
 ; ===========================================================================

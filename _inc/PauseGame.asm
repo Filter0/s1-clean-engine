@@ -6,7 +6,6 @@
 
 
 PauseGame:
-		nop	
 		tst.b	(v_lives).w	; do you have any lives	left?
 		beq.s	Unpause		; if not, branch
 		tst.w	(f_pause).w	; is game already paused?
@@ -26,7 +25,6 @@ Pause_Loop:
 		btst	#bitA,(v_jpadpress1).w ; is button A pressed?
 		beq.s	Pause_ChkBC	; if not, branch
 		move.b	#id_Title,(v_gamemode).w ; set game mode to 4 (title screen)
-		nop	
 		bra.s	Pause_EndMusic
 ; ===========================================================================
 
@@ -47,11 +45,11 @@ Unpause:
 		move.w	#0,(f_pause).w	; unpause the game
 
 Pause_DoNothing:
-		rts	
+		rts
 ; ===========================================================================
 
 Pause_SlowMo:
 		move.w	#1,(f_pause).w
 		move.b	#$80,(v_snddriver_ram+f_pausemusic).w	; Unpause the music
-		rts	
+		rts
 ; End of function PauseGame

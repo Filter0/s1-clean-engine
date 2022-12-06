@@ -188,13 +188,13 @@ MoveScreenHoriz:
 		subi.w	#16,d0		; is distance more than 160px?
 		bcc.s	SH_AheadOfMid	; if yes, branch
 		clr.w	(v_scrshiftx).w
-		rts	
+		rts
 ; ===========================================================================
 
 SH_AheadOfMid:
 		cmpi.w	#16,d0		; is Sonic within 16px of middle area?
 		bcs.s	SH_Ahead16	; if yes, branch
-		move.w	#16,d0		; set to 16 if greater
+		moveq	#16,d0		; set to 16 if greater
 
 	SH_Ahead16:
 		add.w	(v_screenposx).w,d0
@@ -208,26 +208,21 @@ SH_SetScreen:
 		asl.w	#8,d1
 		move.w	d0,(v_screenposx).w ; set new screen position
 		move.w	d1,(v_scrshiftx).w ; set distance for screen movement
-		rts	
+		rts
 ; ===========================================================================
 
 SH_BehindMid:
-		add.w	(v_screenposx).w,d0
+		cmpi.w	#-16,d0		; is Sonic within 16px of middle area?
+		bgt.s	SH_Behind16	; if yes, branch
+		moveq	#-16,d0		; set to 16 if greater
+
+	SH_Behind16:
+                add.w	(v_screenposx).w,d0
 		cmp.w	(v_limitleft2).w,d0
 		bgt.s	SH_SetScreen
 		move.w	(v_limitleft2).w,d0
 		bra.s	SH_SetScreen
 ; End of function MoveScreenHoriz
-
-; ===========================================================================
-		tst.w	d0
-		bpl.s	loc_6610
-		move.w	#-2,d0
-		bra.s	SH_BehindMid
-
-loc_6610:
-		move.w	#2,d0
-		bra.s	SH_AheadOfMid
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	scroll the level vertically as Sonic moves

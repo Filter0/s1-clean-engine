@@ -29,7 +29,7 @@ loc_6DA0:
 		move.b	#1,(f_bgscrollvert).w
 
 DLE_NoChg:
-		rts	
+		rts
 ; ===========================================================================
 
 loc_6DAC:
@@ -39,8 +39,7 @@ loc_6DAC:
 		bcs.s	loc_6DC4
 		btst	#1,(v_player+obStatus).w
 		beq.s	loc_6DC4
-		add.w	d1,d1
-		add.w	d1,d1
+		lsl.w	#2,d1
 
 loc_6DC4:
 		add.w	d1,(v_limitbtm2).w
@@ -165,4 +164,4 @@ locret_6EE8:
 
 DLE_GHZ3end:
 		move.w	(v_screenposx).w,(v_limitleft2).w
-		rts	
+		rts

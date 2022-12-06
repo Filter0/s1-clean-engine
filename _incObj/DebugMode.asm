@@ -27,7 +27,7 @@ Debug_Main:	; Routine 0
 		move.b	(v_zone).w,d0
 
 @selectlist:
-		lea	(DebugList).l,a2
+		lea	DebugList(pc),a2
 		add.w	d0,d0
 		adda.w	(a2,d0.w),a2
 		move.w	(a2)+,d6
@@ -43,11 +43,11 @@ Debug_Main:	; Routine 0
 Debug_Action:	; Routine 2
 		moveq	#0,d0
 		move.b	(v_zone).w,d0
-		lea	(DebugList).l,a2
+		lea	DebugList(pc),a2
 		add.w	d0,d0
 		adda.w	(a2,d0.w),a2
 		move.w	(a2)+,d6
-		bsr.w	Debug_Control
+		bsr.s	Debug_Control
 		jmp	(DisplaySprite).l
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||

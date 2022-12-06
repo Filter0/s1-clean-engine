@@ -50,7 +50,7 @@ FindNearestTile:
 		addq.w	#1,d1
 		cmpi.w	#$29,d1
 		bne.s	@treatasnormal
-		move.w	#$51,d1
+		moveq	#$51,d1
 
 	@treatasnormal:
 		subq.b	#1,d1

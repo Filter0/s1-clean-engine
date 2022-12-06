@@ -2140,7 +2140,7 @@ LevSel_ChgSnd:
 		andi.w	#$F,d0
 		cmpi.b	#$A,d0		; is digit $A-$F?
 		blo.s	LevSel_Numb	; if not, branch
-		addi.b	#7,d0		; use alpha characters
+		addq.b	#7,d0		; use alpha characters
 
 	LevSel_Numb:
 		add.w	d3,d0
@@ -3237,7 +3237,9 @@ LevelDataLoad:
 		lea	(LevelHeaders).l,a2
 		lea	(a2,d0.w),a2
 		move.l	a2,-(sp)
-		addq.l	#4,a2
+                movea.l (a2)+,a0 ; move art from a2 to a0
+                locVRAM 0 ; get vram location to load to
+		bsr.w   NemDec ; decompress the nemesis art
 		movea.l	(a2)+,a0
 		lea	(v_16x16).w,a1	; RAM address for 16x16 mappings
 		moveq	#0,d0
@@ -3246,8 +3248,7 @@ LevelDataLoad:
 		lea	(v_256x256).l,a1 ; RAM address for 256x256 mappings
 		bsr.w	KosDec
 		bsr.s	LevelLayoutLoad
-		move.w	(a2)+,d0
-		move.w	(a2),d0
+		move.l	(a2)+,d0
 		andi.w	#$FF,d0
 		bsr.w	PalLoad1	; load palette (based on d0)
 		movea.l	(sp)+,a2
@@ -3283,11 +3284,7 @@ LevelLayoutLoad:
 
 LevelLayoutLoad2:
 		move.w	(v_zone).w,d0
-		lsl.b	#6,d0
-		lsr.w	#5,d0
-		move.w	d0,d2
-		add.w	d0,d0
-		add.w	d2,d0
+		lsl.w	#2,d0
 		add.w	d1,d0
 		lea	(Level_Index).l,a1
 		move.w	(a1,d0.w),d0
@@ -3406,7 +3403,7 @@ Plat_Exit:
 SlopeObject:
 		lea	(v_player).w,a1
 		tst.w	obVelY(a1)
-		bmi.w	Plat_Exit
+		bmi.s	Plat_Exit
 		move.w	obX(a1),d0
 		sub.w	obX(a0),d0
 		add.w	d1,d0
@@ -3989,7 +3986,7 @@ loc_D358:
 loc_D362:
 		moveq	#$1F,d7
 		bsr.s	loc_D348
-		moveq	#$5F,d7
+		moveq	#$7F,d7
 
 loc_D368:
 		moveq	#0,d0
@@ -5401,10 +5398,10 @@ Art_GhzFlower2:	incbin	"artunc\GHZ Flower Small.bin"
 ; ---------------------------------------------------------------------------
 Level_Index:
 		; GHZ
-		dc.w Level_GHZ1-Level_Index, Level_GHZbg-Level_Index, byte_68F88-Level_Index
-		dc.w Level_GHZ2-Level_Index, Level_GHZbg-Level_Index, byte_68F88-Level_Index
-		dc.w Level_GHZ3-Level_Index, Level_GHZbg-Level_Index, byte_68F88-Level_Index
-		dc.w byte_68F88-Level_Index, byte_68F88-Level_Index, byte_68F88-Level_Index
+		dc.w Level_GHZ1-Level_Index, Level_GHZbg-Level_Index
+		dc.w Level_GHZ2-Level_Index, Level_GHZbg-Level_Index
+		dc.w Level_GHZ3-Level_Index, Level_GHZbg-Level_Index
+		dc.w byte_68F88-Level_Index, byte_68F88-Level_Index
 
 Level_GHZ1:	incbin	"levels\ghz1.bin"
 		even

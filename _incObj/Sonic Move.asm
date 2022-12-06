@@ -237,10 +237,10 @@ loc_130BA:
 		move.b	#id_Stop,obAnim(a0) ; use "stopping" animation
 		bclr	#0,obStatus(a0)
 		move.w	#sfx_Skid,d0
-		jsr	(PlaySound_Special).l	; play stopping sound
+		jmp	(PlaySound_Special).l	; play stopping sound
 
 locret_130E8:
-		rts	
+		rts
 ; End of function Sonic_MoveLeft
 
 
@@ -264,7 +264,7 @@ loc_13104:
 loc_1310C:
 		move.w	d0,obInertia(a0)
 		move.b	#id_Walk,obAnim(a0) ; use walking animation
-		rts	
+		rts
 ; ===========================================================================
 
 loc_13118:
@@ -283,8 +283,8 @@ loc_13120:
 		move.b	#id_Stop,obAnim(a0) ; use "stopping" animation
 		bset	#0,obStatus(a0)
 		move.w	#sfx_Skid,d0
-		jsr	(PlaySound_Special).l	; play stopping sound
+		jmp	(PlaySound_Special).l	; play stopping sound
 
 locret_1314E:
-		rts	
+		rts
 ; End of function Sonic_MoveRight

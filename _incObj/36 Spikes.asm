@@ -82,9 +82,9 @@ Spik_Hurt:
 		tst.b	(v_invinc).w	; is Sonic invincible?
 		bne.s	Spik_Display	; if yes, branch
 	if FixSpikeFeature
-		tst.w	(v_player+$30).w ; is Sonic invulnerable?
+		tst.w	(v_player+flashtime).w ; is Sonic invulnerable?
 		bne.s	Spik_Display	; if yes, branch
-	endc	
+	endc
 		move.l	a0,-(sp)
 		movea.l	a0,a2
 		lea	(v_player).w,a0

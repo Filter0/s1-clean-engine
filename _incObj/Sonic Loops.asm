@@ -6,8 +6,6 @@
 
 
 Sonic_Loops:
-		cmpi.b	#id_SLZ,(v_zone).w ; is level SLZ ?
-		beq.s	@isstarlight	; if yes, branch
 		tst.b	(v_zone).w	; is level GHZ ?
 		bne.w	@noloops	; if not, branch
 

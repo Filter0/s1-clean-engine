@@ -7,9 +7,8 @@ Springs:
 		move.b	obRoutine(a0),d0
 		move.w	Spring_Index(pc,d0.w),d1
 		jsr	Spring_Index(pc,d1.w)
-		bsr.w	DisplaySprite
 		out_of_range.w	DeleteObject
-		rts	
+		bra.w	DisplaySprite
 ; ===========================================================================
 Spring_Index:	dc.w Spring_Main-Spring_Index
 		dc.w Spring_Up-Spring_Index
@@ -64,14 +63,14 @@ loc_DB72:
 ; ===========================================================================
 
 Spring_Up:	; Routine 2
-		move.w	#$1B,d1
-		move.w	#8,d2
-		move.w	#$10,d3
+		moveq	#$1B,d1
+		moveq	#8,d2
+		moveq	#$10,d3
 		move.w	obX(a0),d4
 		bsr.w	SolidObject
 		tst.b	obSolid(a0)	; is Sonic on top of the spring?
 		bne.s	Spring_BounceUp	; if yes, branch
-		rts	
+		rts
 ; ===========================================================================
 
 Spring_BounceUp:
@@ -88,20 +87,20 @@ Spring_BounceUp:
 		jsr	(PlaySound_Special).l	; play spring sound
 
 Spring_AniUp:	; Routine 4
-		lea	(Ani_Spring).l,a1
+		lea	Ani_Spring(pc),a1
 		bra.w	AnimateSprite
 ; ===========================================================================
 
 Spring_ResetUp:	; Routine 6
 		move.b	#1,obNextAni(a0) ; reset animation
 		subq.b	#4,obRoutine(a0) ; goto "Spring_Up" routine
-		rts	
+		rts
 ; ===========================================================================
 
 Spring_LR:	; Routine 8
-		move.w	#$13,d1
-		move.w	#$E,d2
-		move.w	#$F,d3
+		moveq	#$13,d1
+		moveq	#$E,d2
+		moveq	#$F,d3
 		move.w	obX(a0),d4
 		bsr.w	SolidObject
 		cmpi.b	#2,obRoutine(a0)
@@ -111,7 +110,7 @@ Spring_LR:	; Routine 8
 loc_DC0C:
 		btst	#5,obStatus(a0)
 		bne.s	Spring_BounceLR
-		rts	
+		rts
 ; ===========================================================================
 
 Spring_BounceLR:
@@ -138,20 +137,20 @@ loc_DC56:
 		jsr	(PlaySound_Special).l	; play spring sound
 
 Spring_AniLR:	; Routine $A
-		lea	(Ani_Spring).l,a1
+		lea	Ani_Spring(pc),a1
 		bra.w	AnimateSprite
 ; ===========================================================================
 
 Spring_ResetLR:	; Routine $C
 		move.b	#2,obNextAni(a0) ; reset animation
 		subq.b	#4,obRoutine(a0) ; goto "Spring_LR" routine
-		rts	
+		rts
 ; ===========================================================================
 
 Spring_Dwn:	; Routine $E
-		move.w	#$1B,d1
-		move.w	#8,d2
-		move.w	#$10,d3
+		moveq	#$1B,d1
+		moveq	#8,d2
+		moveq	#$10,d3
 		move.w	obX(a0),d4
 		bsr.w	SolidObject
 		cmpi.b	#2,obRoutine(a0)
@@ -165,7 +164,7 @@ loc_DCA4:
 		bmi.s	Spring_BounceDwn
 
 locret_DCAE:
-		rts	
+		rts
 ; ===========================================================================
 
 Spring_BounceDwn:
@@ -182,7 +181,7 @@ Spring_BounceDwn:
 		jsr	(PlaySound_Special).l	; play spring sound
 
 Spring_AniDwn:	; Routine $10
-		lea	(Ani_Spring).l,a1
+		lea	Ani_Spring(pc),a1
 		bra.w	AnimateSprite
 ; ===========================================================================
 
@@ -190,4 +189,4 @@ Spring_ResetDwn:
 		; Routine $12
 		move.b	#1,obNextAni(a0) ; reset animation
 		subq.b	#4,obRoutine(a0) ; goto "Spring_Dwn" routine
-		rts	
+		rts

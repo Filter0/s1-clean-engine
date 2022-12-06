@@ -6,16 +6,20 @@
 ; For format explanation see http://info.sonicretro.org/Nemesis_compression
 ; ---------------------------------------------------------------------------
 
+NemRAM_Used:    equ 0
+
 ; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
 
 ; Nemesis decompression subroutine, decompresses art to RAM
 ; Inputs:
 ; a0 = art address
 ; a4 = destination RAM address
+     if NemRAM_Used
 NemDecToRAM:
 		movem.l	d0-a1/a3-a5,-(sp)
 		lea	NemPCD_WriteRowToRAM(pc),a3 ; advance to the next location after each write
 		bra.s	NemDecMain
+     endc
 
 ; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
 
@@ -36,7 +40,6 @@ loc_146A:
 		movea.w	d2,a5	; and store it in a5 because there aren't any spare data registers
 		moveq	#7,d3	; 8 pixels in a pattern row
 		moveq	#0,d2
-		moveq	#0,d4
 		bsr.w	NemDec_BuildCodeTable
 		move.b	(a0)+,d5	; get first byte of compressed data
 		asl.w	#8,d5	; shift up by a byte
@@ -138,7 +141,7 @@ NemPCD_WriteRowToVDP_XOR:
 		bne.s	NemPCD_NewRow
 		rts
 ; ===========================================================================
-
+     if NemRAM_Used
 NemPCD_WriteRowToRAM:
 		move.l	d4,(a4)+
 		subq.w	#1,a5
@@ -153,6 +156,7 @@ NemPCD_WriteRowToRAM_XOR:
 		move.w	a5,d4
 		bne.s	NemPCD_NewRow
 		rts
+     endc
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 ; ---------------------------------------------------------------------------

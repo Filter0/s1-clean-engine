@@ -159,7 +159,7 @@ AniArt_GiantRing:
 		; Send VDP command (write to VRAM at address contained in v_gfxbigring)
 		move.l	d0,4(a6)
 
-		move.w	#@size-1,d1
-		bra.w	LoadTiles
+		moveq	#@size-1,d1
+		bra.s	LoadTiles
 
 ; End of function AniArt_GiantRing
