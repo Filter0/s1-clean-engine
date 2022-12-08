@@ -12,7 +12,7 @@ WSnd_Index:	bra.w   WSnd_Main
 ; ===========================================================================
 
 WSnd_Main:	; Routine 0
-		addq.b	#4,obRoutine(a0)
+                addq.b	#4,obRoutine(a0)
 		move.b	#4,obRender(a0)
 
 WSnd_PlaySnd:	; Routine 2
@@ -20,7 +20,7 @@ WSnd_PlaySnd:	; Routine 2
 		andi.b	#$3F,d0
 		bne.s	WSnd_ChkDel
 		move.w	#sfx_Waterfall,d0
-		jsr	(PlaySound_Special).l	; play waterfall sound
+		jsr	PlaySound_Special(pc)	; play waterfall sound
 
 	WSnd_ChkDel:
 		out_of_range.w	DeleteObject

@@ -67,6 +67,10 @@ NemDec_ProcessCompressedData:
 		andi.w	#$FF,d1
 		add.w	d1,d1
 		sub.b	(a1,d1.w),d6	; get the length of the code in bits
+		moveq   #0,d0
+		move.b	1(a1,d1.w),d0
+		
+NemPCD_NewByte:
 		cmpi.b	#9,d6	; does a new byte need to be read?
 		bcc.s	loc_14B2	; if not, branch
 		addq.b	#8,d6
@@ -74,10 +78,8 @@ NemDec_ProcessCompressedData:
 		move.b	(a0)+,d5	; read next byte
 
 loc_14B2:
-		move.b	1(a1,d1.w),d1
-		move.w	d1,d0
-		andi.w	#$F,d1	; get palette index for pixel
-		andi.w	#$F0,d0
+		moveq	#$F,d1	; get palette index for pixel
+		and.w	d0,d1
 
 NemPCD_ProcessCompressedData:
 		lsr.w	#4,d0	; get repeat count
@@ -113,15 +115,9 @@ loc_14E4:
 		subi.b	#7+6,d6	; and 7 bits needed for the inline data itself
 		move.w	d5,d1
 		lsr.w	d6,d1	; shift so that low bit of the code is in bit position 0
-		move.w	d1,d0
-		andi.w	#$F,d1	; get palette index for pixel
-		andi.w	#$70,d0	; high nybble is repeat count for pixel
-		cmpi.b	#9,d6
-		bcc.s	NemPCD_ProcessCompressedData
-		addq.b	#8,d6
-		asl.w	#8,d5
-		move.b	(a0)+,d5
-		bra.s	NemPCD_ProcessCompressedData
+		moveq	#$7F,d0
+		and.w	d1,d0	; get palette index for pixel
+		bra.s	NemPCD_NewByte
 ; End of function NemPCD_NewRow
 
 ; ===========================================================================

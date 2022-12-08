@@ -18,7 +18,7 @@ Pause_StopGame:
 		move.b	#1,(v_snddriver_ram+f_pausemusic).w ; pause music
 
 Pause_Loop:
-		move.b	#$10,(v_vbla_routine).w
+		move.b	#id_VBla_06,(v_vbla_routine).w
 		bsr.w	WaitForVBla
 		tst.b	(f_slomocheat).w ; is slow-motion cheat on?
 		beq.s	Pause_ChkStart	; if not, branch
@@ -42,7 +42,7 @@ Pause_EndMusic:
 		move.b	#$80,(v_snddriver_ram+f_pausemusic).w	; unpause the music
 
 Unpause:
-		move.w	#0,(f_pause).w	; unpause the game
+		clr.w	(f_pause).w	; unpause the game
 
 Pause_DoNothing:
 		rts

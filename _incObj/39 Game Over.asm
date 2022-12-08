@@ -22,7 +22,8 @@ Over_ChkPLC:	; Routine 0
 Over_Main:
 		addq.b	#2,obRoutine(a0)
 		move.w	#$50,obX(a0)	; set x-position
-		btst	#0,obFrame(a0)	; is the object	"OVER"?
+		moveq   #0,d0
+		btst	d0,obFrame(a0)	; is the object	"OVER"?
 		beq.s	Over_1stWord	; if not, branch
 		move.w	#$1F0,obX(a0)	; set x-position for "OVER"
 
@@ -30,8 +31,8 @@ Over_Main:
 		move.w	#$F0,obScreenY(a0)
 		move.l	#Map_Over,obMap(a0)
 		move.w	#$855E,obGfx(a0)
-		move.b	#0,obRender(a0)
-		move.b	#0,obPriority(a0)
+		move.b	d0,obRender(a0)
+		move.b	d0,obPriority(a0)
 
 Over_Move:	; Routine 2
 		moveq	#$10,d1		; set horizontal speed
@@ -52,8 +53,7 @@ Over_SetWait:
 ; ===========================================================================
 
 Over_Wait:	; Routine 4
-		move.b	(v_jpadpress1).w,d0
-		andi.b	#btnABC,d0	; is button A, B or C pressed?
+		tst.b	(v_jpadpress1).w ; is any button pressed?
 		bne.s	Over_ChgMode	; if yes, branch
 		btst	#0,obFrame(a0)
 		bne.s	Over_Display

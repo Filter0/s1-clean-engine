@@ -144,12 +144,13 @@ BgScroll_Index:	dc.w BgScroll_GHZ-BgScroll_Index
 ; ===========================================================================
 
 BgScroll_GHZ:
-		clr.l	(v_bgscreenposx).w
-		clr.l	(v_bgscreenposy).w
-		clr.l	(v_bg2screenposy).w
-		clr.l	(v_bg3screenposy).w
+		moveq   #0,d0
+                move.l	d0,(v_bgscreenposx).w
+		move.l	d0,(v_bgscreenposy).w
+		move.l	d0,(v_bg2screenposy).w
+		move.l	d0,(v_bg3screenposy).w
 		lea	($FFFFA800).w,a2
-		clr.l	(a2)+
-		clr.l	(a2)+
-		clr.l	(a2)+
+		move.l	d0,(a2)+
+		move.l	d0,(a2)+
+		move.l	d0,(a2)+
 		rts

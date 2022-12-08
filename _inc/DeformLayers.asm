@@ -261,7 +261,7 @@ loc_664A:
 
 loc_6656:
 		clr.w	(v_scrshifty).w
-		rts	
+		rts
 ; ===========================================================================
 
 loc_665C:
@@ -309,8 +309,8 @@ loc_66AE:
 		move.w	d0,d1
 		add.w	(v_screenposy).w,d1
 		tst.w	d0
-		bpl.w	loc_6700
-		bra.w	loc_66CC
+		bpl.s	loc_6700
+		bra.s	loc_66CC
 ; ===========================================================================
 
 loc_66C0:
@@ -375,14 +375,14 @@ loc_6724:
 		sub.w	d4,d0
 		bpl.s	@scrollBottom
 		bset	#0,(v_fg_scroll_flags).w
-		rts	
+		rts
 ; ===========================================================================
 
 	@scrollBottom:
 		bset	#1,(v_fg_scroll_flags).w
 
 	@return:
-		rts	
+		rts
 ; End of function ScrollVertical
 
 

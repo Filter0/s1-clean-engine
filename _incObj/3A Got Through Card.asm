@@ -49,7 +49,7 @@ Got_Loop:
 		move.b	d0,obFrame(a1)
 		move.l	#Map_Got,obMap(a1)
 		move.w	#$8580,obGfx(a1)
-		move.b	#0,obRender(a1)
+		clr.b	obRender(a1)
 		lea	$40(a1),a1
 		dbf	d1,Got_Loop	; repeat 6 times
 
@@ -104,14 +104,16 @@ Got_TimeBonus:	; Routine 6
 		moveq	#0,d0
 		tst.w	(v_timebonus).w	; is time bonus	= zero?
 		beq.s	Got_RingBonus	; if yes, branch
-		addi.w	#10,d0		; add 10 to score
-		subi.w	#10,(v_timebonus).w ; subtract 10 from time bonus
+		moveq   #10,d1
+		add.w	d1,d0		; add 10 to score
+		sub.w	d1,(v_timebonus).w ; subtract 10 from time bonus
 
 Got_RingBonus:
 		tst.w	(v_ringbonus).w	; is ring bonus	= zero?
 		beq.s	Got_ChkBonus	; if yes, branch
-		addi.w	#10,d0		; add 10 to score
-		subi.w	#10,(v_ringbonus).w ; subtract 10 from ring bonus
+		moveq   #10,d1
+		add.w	d1,d0		; add 10 to score
+		sub.w	d1,(v_ringbonus).w ; subtract 10 from ring bonus
 
 Got_ChkBonus:
 		tst.w	d0		; is there any bonus?

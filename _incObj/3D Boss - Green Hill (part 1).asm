@@ -26,7 +26,7 @@ BGHZ_Main:	; Routine 0
 ; ===========================================================================
 
 BGHZ_Loop:
-		jsr	(FindNextFreeObj).l
+		jsr	FindNextFreeObj(pc)
 		bne.s	loc_17772
 
 BGHZ_LoadBoss:

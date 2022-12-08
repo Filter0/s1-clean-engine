@@ -36,7 +36,7 @@ Bonus_Main:	; Routine 0
 		move.l	#Map_Bonus,obMap(a0)
 		move.w	#$84B6,obGfx(a0)
 		ori.b	#4,obRender(a0)
-		move.b	#0,obPriority(a0)
+		clr.b	obPriority(a0)
 		move.b	#$10,obActWid(a0)
 		move.b	obSubtype(a0),obFrame(a0)
 		move.w	#119,bonus_timelen(a0) ; set display time to 2 seconds

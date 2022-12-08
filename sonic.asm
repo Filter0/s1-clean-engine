@@ -339,18 +339,14 @@ VBla_Exit:
 		movem.l	(sp)+,d0-a6
 		rte
 ; ===========================================================================
-VBla_Index:	dc.w VBla_00-VBla_Index
-                dc.w VBla_02-VBla_Index
-		dc.w VBla_04-VBla_Index
-                dc.w VBla_06-VBla_Index
-		dc.w VBla_08-VBla_Index
-                dc.w VBla_0A-VBla_Index
-		dc.w VBla_0C-VBla_Index
-                dc.w VBla_0E-VBla_Index
-		dc.w VBla_10-VBla_Index
-                dc.w VBla_12-VBla_Index
-		dc.w VBla_14-VBla_Index
-                dc.w VBla_16-VBla_Index
+VBla_Index:
+ptr_VBla_00:    dc.w VBla_00-VBla_Index
+ptr_VBla_02:    dc.w VBla_02-VBla_Index
+ptr_VBla_04:	dc.w VBla_04-VBla_Index
+ptr_VBla_06:	dc.w VBla_06-VBla_Index
+ptr_VBla_08:	dc.w VBla_08-VBla_Index
+ptr_VBla_0A:    dc.w VBla_0A-VBla_Index
+ptr_VBla_0C:	dc.w VBla_0C-VBla_Index
 ; ===========================================================================
 
 VBla_00:
@@ -379,36 +375,7 @@ VBla_00:
 		bra.w	VBla_Music
 ; ===========================================================================
 
-VBla_02:
-		bsr.w	sub_106E
-
-VBla_14:
-		tst.w	(v_demolength).w
-		beq.s	@end
-		subq.w	#1,(v_demolength).w
-
-	@end:
-		rts
-; ===========================================================================
-
-VBla_04:
-		bsr.w	sub_106E
-		bsr.w	LoadTilesAsYouMove_BGOnly
-		bsr.w	sub_1642
-		tst.w	(v_demolength).w
-		beq.s	@end
-		subq.w	#1,(v_demolength).w
-
-	@end:
-		rts
-; ===========================================================================
-
 VBla_06:
-		bra.w	sub_106E
-; ===========================================================================
-
-VBla_10:
-VBla_08:
 		bsr.w	ReadJoypads
 		tst.b	(f_wtr_state).w
 		bne.s	@waterabove
@@ -439,37 +406,12 @@ VBla_08:
 		jsr	(AnimateLevelGfx).l
 		jsr	(HUD_Update).l
 		bsr.w	ProcessDPLC2
-		tst.w	(v_demolength).w ; is there time left on the demo?
-		beq.s	@end		; if not, branch
-		subq.w	#1,(v_demolength).w ; subtract 1 from time left
-
-	@end:
-		rts
+		bra.w   VBla_0C
 ; End of function Demo_Time
 
 ; ===========================================================================
 
-VBla_0A:
-		bsr.w	ReadJoypads
-		writeCRAM	v_pal_dry,$80,0
-		writeVRAM	v_spritetablebuffer,$280,vram_sprites
-		writeVRAM	v_hscrolltablebuffer,$380,vram_hscroll
-		tst.b	(f_sonframechg).w ; has Sonic's sprite changed?
-		beq.s	@nochg		; if not, branch
-
-		writeVRAM	v_sgfx_buffer,$2E0,vram_sonic ; load new Sonic gfx
-		move.b	#0,(f_sonframechg).w
-
-	@nochg:
-		tst.w	(v_demolength).w	; is there time left on the demo?
-		beq.s	@end	; if not, return
-		subq.w	#1,(v_demolength).w	; subtract 1 from time left in demo
-
-	@end:
-		rts
-; ===========================================================================
-
-VBla_0C:
+VBla_08:
 		bsr.w	ReadJoypads
 		tst.b	(f_wtr_state).w
 		bne.s	@waterabove
@@ -500,36 +442,28 @@ VBla_0C:
 		bra.w	sub_1642
 ; ===========================================================================
 
-VBla_0E:
-		bsr.w	sub_106E
-		addq.b	#1,($FFFFF628).w
-		move.b	#$E,(v_vbla_routine).w
-		rts
-; ===========================================================================
-
-VBla_12:
-		bsr.w	sub_106E
+VBla_0A:
+		bsr.s	sub_106E
 		move.w	(v_hbla_hreg).w,(a5)
 		bra.w	sub_1642
 ; ===========================================================================
 
-VBla_16:
-		bsr.w	ReadJoypads
-		writeCRAM	v_pal_dry,$80,0
-		writeVRAM	v_spritetablebuffer,$280,vram_sprites
-		writeVRAM	v_hscrolltablebuffer,$380,vram_hscroll
-		tst.b	(f_sonframechg).w
-		beq.s	@nochg
-		writeVRAM	v_sgfx_buffer,$2E0,vram_sonic
-		move.b	#0,(f_sonframechg).w
+VBla_02:
+		bsr.s	sub_106E
 
-	@nochg:
+VBla_0C:
 		tst.w	(v_demolength).w
 		beq.s	@end
 		subq.w	#1,(v_demolength).w
 
 	@end:
 		rts
+; ===========================================================================
+
+VBla_04:
+		bsr.w	LoadTilesAsYouMove_BGOnly
+		bsr.w	sub_1642
+		bra.s   VBla_02
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
@@ -1085,7 +1019,7 @@ PalFadeIn_Alt:				; start position and size are already set
 		moveq	#$15,d4
 
 	@mainloop:
-		move.b	#$12,(v_vbla_routine).w
+		move.b	#id_VBla_0A,(v_vbla_routine).w
 		bsr.w	WaitForVBla
 		bsr.s	FadeIn_FromBlack
 		bsr.w	RunPLC
@@ -1180,7 +1114,7 @@ PaletteFadeOut:
 		moveq	#$15,d4
 
 	@mainloop:
-		move.b	#$12,(v_vbla_routine).w
+		move.b	#id_VBla_0A,(v_vbla_routine).w
 		bsr.w	WaitForVBla
 		bsr.s	FadeOut_ToBlack
 		bsr.w	RunPLC
@@ -1274,7 +1208,7 @@ PaletteWhiteIn:
 		moveq	#$15,d4
 
 	@mainloop:
-		move.b	#$12,(v_vbla_routine).w
+		move.b	#id_VBla_0A,(v_vbla_routine).w
 		bsr.w	WaitForVBla
 		bsr.s	WhiteIn_FromWhite
 		bsr.w	RunPLC
@@ -1368,7 +1302,7 @@ PaletteWhiteOut:
 		moveq	#$15,d4
 
 	@mainloop:
-		move.b	#$12,(v_vbla_routine).w
+		move.b	#id_VBla_0A,(v_vbla_routine).w
 		bsr.w	WaitForVBla
 		bsr.s	WhiteOut_ToWhite
 		bsr.w	RunPLC
@@ -1543,7 +1477,9 @@ loc_20BC:
 ; ===========================================================================
 
 Pal_Sega1:	incbin	"palette\Sega1.bin"
+                even
 Pal_Sega2:	incbin	"palette\Sega2.bin"
+                even
 
 ; ---------------------------------------------------------------------------
 ; Subroutines to load palettes
@@ -1587,47 +1523,6 @@ PalLoad2:
 		dbf	d7,@loop
 		rts
 ; End of function PalLoad2
-
-; ---------------------------------------------------------------------------
-; Underwater palette loading subroutine
-; ---------------------------------------------------------------------------
-
-; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
-
-
-PalLoad3_Water:
-		lea	PalPointers(pc),a1
-		lsl.w	#3,d0
-		adda.w	d0,a1
-		movea.l	(a1)+,a2	; get palette data address
-		movea.w	(a1)+,a3	; get target RAM address
-		suba.w	#v_pal_dry-v_pal_water,a3		; skip to "main" RAM address
-		move.w	(a1)+,d7	; get length of palette data
-
-	@loop:
-		move.l	(a2)+,(a3)+	; move data to RAM
-		dbf	d7,@loop
-		rts
-; End of function PalLoad3_Water
-
-
-; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
-
-
-PalLoad4_Water:
-		lea	PalPointers(pc),a1
-		lsl.w	#3,d0
-		adda.w	d0,a1
-		movea.l	(a1)+,a2	; get palette data address
-		movea.w	(a1)+,a3	; get target RAM address
-		suba.w	#v_pal_dry-v_pal_water_dup,a3
-		move.w	(a1)+,d7	; get length of palette data
-
-	@loop:
-		move.l	(a2)+,(a3)+	; move data to RAM
-		dbf	d7,@loop
-		rts
-; End of function PalLoad4_Water
 
 ; ===========================================================================
 
@@ -1699,7 +1594,8 @@ GM_Sega:
 		copyTilemap	$FF0A40,$C53A,2,1 ; hide "TM" with a white rectangle
 
 	@loadpal:
-		moveq	#palid_SegaBG,d0
+		bsr.w	PaletteWhiteOut
+                moveq	#palid_SegaBG,d0
 		bsr.w	PalLoad2	; load Sega logo palette
 		move.w	#-$A,(v_pcyc_num).w
 		moveq   #0,d0
@@ -1710,19 +1606,19 @@ GM_Sega:
 		move.w	d0,(vdp_control_port).l
 
 Sega_WaitPal:
-		move.b	#2,(v_vbla_routine).w
+		move.b	#id_VBla_02,(v_vbla_routine).w
 		bsr.w	WaitForVBla
 		bsr.w	PalCycle_Sega
 		bne.s	Sega_WaitPal
 
 		move.b	#sfx_Sega,d0
 		bsr.w	PlaySound_Special	; play "SEGA" sound
-		move.b	#$14,(v_vbla_routine).w
+		move.b	#id_VBla_0C,(v_vbla_routine).w
 		bsr.w	WaitForVBla
-		move.w	#$1E,(v_demolength).w
+		move.w	#$10,(v_demolength).w
 
 Sega_WaitEnd:
-		move.b	#2,(v_vbla_routine).w
+		move.b	#id_VBla_02,(v_vbla_routine).w
 		bsr.w	WaitForVBla
 		tst.w	(v_demolength).w
 		beq.s	Sega_GotoTitle
@@ -1830,7 +1726,7 @@ GM_Title:
 		move.b	#bgm_Title,d0
 		bsr.w	PlaySound_Special	; play title screen music
 		clr.b	(f_debugmode).w ; disable debug mode
-		move.w	#$178,(v_demolength).w ; run title screen for $178 frames
+		move.w	#$1F8,(v_demolength).w ; run title screen for $1F8 frames
 
 		move.b	#id_TitleSonic,(v_objspace+$40).w ; load big Sonic object
 		move.b	#id_PSBTM,(v_objspace+$80).w ; load "PRESS START BUTTON" object
@@ -1857,7 +1753,7 @@ GM_Title:
 		bsr.w	PaletteFadeIn
 
 Tit_MainLoop:
-		move.b	#4,(v_vbla_routine).w
+		move.b	#id_VBla_04,(v_vbla_routine).w
 		bsr.w	WaitForVBla
 		jsr	ExecuteObjects(pc)
 		bsr.w	DeformLayers
@@ -1868,6 +1764,7 @@ Tit_MainLoop:
 		cmpi.w	#$1C00,(v_objspace+obX).w	; has Sonic object passed $1C00 on x-axis?
 		blo.s	Tit_ChkRegion	; if not, branch
 
+GoToSegaScreen:
 		move.b	#id_Sega,(v_gamemode).w ; go to Sega screen
 		rts
 ; ===========================================================================
@@ -1923,7 +1820,9 @@ Tit_CountC:
 		addq.w	#1,(v_title_ccount).w ; increment C counter
 
 loc_3230:
-		btst	#7,(v_jpadhold1).w ; check if Start is pressed
+		tst.w	(v_demolength).w
+		beq.w	GoToSegaScreen
+                btst	#7,(v_jpadhold1).w ; check if Start is pressed
 		beq.w	Tit_MainLoop	; if not, branch
 
 Tit_ChkLevSel:
@@ -1959,7 +1858,7 @@ Tit_ChkLevSel:
 ; ---------------------------------------------------------------------------
 
 LevelSelect:
-		move.b	#4,(v_vbla_routine).w
+		move.b	#id_VBla_04,(v_vbla_routine).w
 		bsr.w	WaitForVBla
 		bsr.w	LevSelControls
 		bsr.w	RunPLC
@@ -2177,13 +2076,13 @@ LevSel_ChgLine:
 ; ---------------------------------------------------------------------------
 LevelMenuText:	incbin	"misc\Level Select Text.bin"
 		even
+; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Music	playlist
 ; ---------------------------------------------------------------------------
 MusicList:
 		dc.b bgm_GHZ	; GHZ
 		even
-; ===========================================================================
 
 ; ---------------------------------------------------------------------------
 ; Level
@@ -2265,8 +2164,6 @@ Level_LoadPal:
 		enable_ints
 		moveq	#palid_Sonic,d0
 		bsr.w	PalLoad2	; load Sonic's palette
-
-Level_GetBgm:
 		moveq	#0,d0
 		move.b	(v_zone).w,d0
 		lea	MusicList(pc),a1 ; load	music playlist
@@ -2275,7 +2172,7 @@ Level_GetBgm:
 		move.b	#id_TitleCard,(v_objspace+$80).w ; load title card object
 
 Level_TtlCardLoop:
-		move.b	#$C,(v_vbla_routine).w
+		move.b	#id_VBla_08,(v_vbla_routine).w
 		bsr.w	WaitForVBla
 		jsr	ExecuteObjects(pc)
 		jsr	BuildSprites(pc)
@@ -2340,7 +2237,7 @@ Level_ChkWaterPal:
 		moveq	#3,d1
 
 	Level_DelayLoop:
-		move.b	#8,(v_vbla_routine).w
+		move.b	#id_VBla_06,(v_vbla_routine).w
 		bsr.w	WaitForVBla
 		dbf	d1,Level_DelayLoop
 
@@ -2370,7 +2267,7 @@ Level_StartGame:
 
 Level_MainLoop:
 		bsr.w	PauseGame
-		move.b	#8,(v_vbla_routine).w
+		move.b	#id_VBla_06,(v_vbla_routine).w
 		bsr.w	WaitForVBla
 		addq.w	#1,(v_framecount).w ; add 1 to level timer
 		jsr	ExecuteObjects(pc)
@@ -3248,8 +3145,8 @@ LevelDataLoad:
 		lea	(v_256x256).l,a1 ; RAM address for 256x256 mappings
 		bsr.w	KosDec
 		bsr.s	LevelLayoutLoad
-		move.l	(a2)+,d0
-		andi.w	#$FF,d0
+		move.l  (a2)+,d0
+		andi.w  #$F,d0
 		bsr.w	PalLoad1	; load palette (based on d0)
 		movea.l	(sp)+,a2
 		addq.w	#4,a2		; read number for 2nd PLC
@@ -3259,7 +3156,7 @@ LevelDataLoad:
 		bra.w	AddPLC		; load pattern load cues
 
 	@skipPLC:
-		rts
+                rts
 ; End of function LevelDataLoad
 
 ; ---------------------------------------------------------------------------
@@ -3986,7 +3883,7 @@ loc_D358:
 loc_D362:
 		moveq	#$1F,d7
 		bsr.s	loc_D348
-		moveq	#$7F,d7
+		moveq	#$5F,d7
 
 loc_D368:
 		moveq	#0,d0
@@ -4648,7 +4545,7 @@ Sonic_MdNormal:
 		bsr.w	Sonic_Move
 		bsr.w	Sonic_Roll
 		bsr.w	Sonic_LevelBound
-		jsr	(SpeedToPos).l
+		jsr	SpeedToPos(pc)
 		bsr.w	Sonic_AnglePos
 		bsr.w	Sonic_SlopeRepel
 		rts
@@ -4658,7 +4555,7 @@ Sonic_MdJump:
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_JumpDirection
 		bsr.w	Sonic_LevelBound
-		jsr	(ObjectFall).l
+		jsr	ObjectFall(pc)
 		btst	#6,obStatus(a0)
 		beq.s	loc_12E5C
 		subi.w	#$28,obVelY(a0)
@@ -4674,7 +4571,7 @@ Sonic_MdRoll:
 		bsr.w	Sonic_RollRepel
 		bsr.w	Sonic_RollSpeed
 		bsr.w	Sonic_LevelBound
-		jsr	(SpeedToPos).l
+		jsr	SpeedToPos(pc)
 		bsr.w	Sonic_AnglePos
 		bsr.w	Sonic_SlopeRepel
 		rts
@@ -5136,12 +5033,12 @@ BossDefeated:
 		move.b	(v_vbla_byte).w,d0
 		andi.b	#7,d0
 		bne.s	locret_178A2
-		jsr	(FindFreeObj).l
+		jsr	FindFreeObj(pc)
 		bne.s	locret_178A2
 		move.b	#id_ExplosionBomb,0(a1)	; load explosion object
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)
-		jsr	(RandomNumber).l
+		jsr	(RandomNumber).w
 		move.w	d0,d1
 		moveq	#0,d1
 		move.b	d0,d1

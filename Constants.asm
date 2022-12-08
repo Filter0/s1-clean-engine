@@ -2,8 +2,6 @@
 ; Constants
 ; ---------------------------------------------------------------------------
 
-Size_of_SegaPCM:		equ $6978
-
 ; VDP addressses
 vdp_data_port:		equ $C00000
 vdp_control_port:	equ $C00004
@@ -79,6 +77,15 @@ id_Special:	equ ptr_GM_Special-GameModeArray; $10
 id_Continue:	equ ptr_GM_Cont-GameModeArray	; $14
 id_Ending:	equ ptr_GM_Ending-GameModeArray	; $18
 id_Credits:	equ ptr_GM_Credits-GameModeArray; $1C
+
+; VBlank routines
+id_VBla_00:	equ ptr_VBla_00-VBla_Index	; $00
+id_VBla_02:	equ ptr_VBla_02-VBla_Index	; $02
+id_VBla_04:	equ ptr_VBla_04-VBla_Index	; $04
+id_VBla_06:	equ ptr_VBla_06-VBla_Index      ; $06
+id_VBla_08:	equ ptr_VBla_08-VBla_Index	; $08
+id_VBla_0A:	equ ptr_VBla_0A-VBla_Index      ; $0A
+id_VBla_0C:	equ ptr_VBla_0C-VBla_Index      ; $0C
 
 ; Levels
 id_GHZ:		equ 0

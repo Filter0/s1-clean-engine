@@ -10,7 +10,7 @@
 
 FindFreeObj:
 		lea	(v_objspace+$800).w,a1 ; start address for object RAM
-		moveq	#$7F,d0
+		moveq	#$5F,d0
 
 	FFree_Loop:
 		tst.b	(a1)		; is object RAM	slot empty?

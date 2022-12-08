@@ -51,7 +51,7 @@ Anml_EndVram:	dc.w $5A5, $5A5, $5A5, $553, $553, $573, $573, $585, $593
 
 Anml_Ending:	; Routine 0
 		tst.b	obSubtype(a0)	; did animal come from a destroyed enemy?
-		beq.w	Anml_FromEnemy	; if yes, branch
+		beq.s	Anml_FromEnemy	; if yes, branch
 		moveq	#0,d0
 		move.b	obSubtype(a0),d0 ; move object type to d0
 		add.w	d0,d0		; multiply d0 by 2

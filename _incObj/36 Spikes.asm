@@ -41,12 +41,12 @@ Spik_Main:	; Routine 0
 
 Spik_Solid:	; Routine 2
 		bsr.w	Spik_Type0x	; make the object move
-		move.w	#4,d2
+		moveq	#4,d2
 		cmpi.b	#5,obFrame(a0)	; is object type $5x ?
 		beq.s	Spik_SideWays	; if yes, branch
 		cmpi.b	#1,obFrame(a0)	; is object type $1x ?
 		bne.s	Spik_Upright	; if not, branch
-		move.w	#$14,d2
+		moveq	#$14,d2
 
 ; Spikes types $1x and $5x face	sideways
 
