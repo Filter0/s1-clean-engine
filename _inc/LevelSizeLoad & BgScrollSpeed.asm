@@ -29,7 +29,7 @@ LevelSizeLoad:
 		move.w	#$1010,($FFFFF74A).w
 		move.w	(a0)+,d0
 		move.w	d0,(v_lookshift).w
-		bra.w	LevSz_ChkLamp
+		bra.s	LevSz_ChkLamp
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Level size array

@@ -7,7 +7,7 @@ Lamppost:
 		move.b	obRoutine(a0),d0
 		move.w	Lamp_Index(pc,d0.w),d1
 		jsr	Lamp_Index(pc,d1.w)
-		jmp	(RememberState).l
+		jmp	RememberState(pc)
 ; ===========================================================================
 Lamp_Index:	dc.w Lamp_Main-Lamp_Index
 		dc.w Lamp_Blue-Lamp_Index
@@ -79,9 +79,9 @@ Lamp_Blue:	; Routine 2
 		bcc.s	@donothing
 
 		move.w	#sfx_Lamppost,d0
-		jsr	(PlaySound_Special).l	; play lamppost sound
+		jsr	(PlaySound_Special).w	; play lamppost sound
 		addq.b	#2,obRoutine(a0)
-		jsr	(FindFreeObj).l
+		jsr	FindFreeObj(pc)
 		bne.s	@fail
 		move.b	#id_Lamppost,0(a1)	; load twirling	lamp object
 		move.b	#6,obRoutine(a1) ; goto Lamp_Twirl next
@@ -120,7 +120,7 @@ Lamp_Twirl:	; Routine 6
 		move.b	obAngle(a0),d0
 		subi.b	#$10,obAngle(a0)
 		subi.b	#$40,d0
-		jsr	(CalcSine).l
+		jsr	(CalcSine).w
 		muls.w	#$C00,d1
 		swap	d1
 		add.w	lamp_origX(a0),d1

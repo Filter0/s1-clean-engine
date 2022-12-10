@@ -133,7 +133,7 @@ loc_12FEA:
 
 loc_12FEE:
 		move.b	obAngle(a0),d0
-		jsr	(CalcSine).l
+		jsr	CalcSine(pc)
 		muls.w	obInertia(a0),d1
 		asr.l	#8,d1
 		move.w	d1,obVelX(a0)
@@ -170,26 +170,26 @@ loc_13024:
 		add.w	d1,obVelX(a0)
 		bset	#5,obStatus(a0)
 		move.w	#0,obInertia(a0)
-		rts	
+		rts
 ; ===========================================================================
 
 loc_13060:
 		sub.w	d1,obVelY(a0)
-		rts	
+		rts
 ; ===========================================================================
 
 loc_13066:
 		sub.w	d1,obVelX(a0)
 		bset	#5,obStatus(a0)
 		move.w	#0,obInertia(a0)
-		rts	
+		rts
 ; ===========================================================================
 
 loc_13078:
 		add.w	d1,obVelY(a0)
 
 locret_1307C:
-		rts	
+		rts
 ; End of function Sonic_Move
 
 
@@ -218,7 +218,7 @@ loc_1309A:
 loc_130A6:
 		move.w	d0,obInertia(a0)
 		move.b	#id_Walk,obAnim(a0) ; use walking animation
-		rts	
+		rts
 ; ===========================================================================
 
 loc_130B2:
@@ -237,7 +237,7 @@ loc_130BA:
 		move.b	#id_Stop,obAnim(a0) ; use "stopping" animation
 		bclr	#0,obStatus(a0)
 		move.w	#sfx_Skid,d0
-		jmp	(PlaySound_Special).l	; play stopping sound
+		jmp	PlaySound_Special(pc)	; play stopping sound
 
 locret_130E8:
 		rts
@@ -283,7 +283,7 @@ loc_13120:
 		move.b	#id_Stop,obAnim(a0) ; use "stopping" animation
 		bset	#0,obStatus(a0)
 		move.w	#sfx_Skid,d0
-		jmp	(PlaySound_Special).l	; play stopping sound
+		jmp	PlaySound_Special(pc)	; play stopping sound
 
 locret_1314E:
 		rts

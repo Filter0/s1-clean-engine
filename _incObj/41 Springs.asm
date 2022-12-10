@@ -31,11 +31,12 @@ Spring_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
 		move.l	#Map_Spring,obMap(a0)
 		move.w	#$523,obGfx(a0)
-		ori.b	#4,obRender(a0)
+		moveq   #4,d1
+		or.b	d1,obRender(a0)
 		move.b	#$10,obActWid(a0)
-		move.b	#4,obPriority(a0)
+		move.b	d1,obPriority(a0)
 		move.b	obSubtype(a0),d0
-		btst	#4,d0		; does the spring face left/right?
+		btst	d1,d0		; does the spring face left/right?
 		beq.s	Spring_NotLR	; if not, branch
 
 		move.b	#8,obRoutine(a0) ; use "Spring_LR" routine
@@ -59,7 +60,7 @@ Spring_Main:	; Routine 0
 loc_DB72:
 		andi.w	#$F,d0
 		move.w	Spring_Powers(pc,d0.w),spring_pow(a0)
-		rts	
+		rts
 ; ===========================================================================
 
 Spring_Up:	; Routine 2
@@ -84,7 +85,7 @@ Spring_BounceUp:
 		bclr	#3,obStatus(a0)
 		clr.b	obSolid(a0)
 		move.w	#sfx_Spring,d0
-		jsr	(PlaySound_Special).l	; play spring sound
+		jsr	PlaySound_Special(pc)	; play spring sound
 
 Spring_AniUp:	; Routine 4
 		lea	Ani_Spring(pc),a1
@@ -134,7 +135,7 @@ loc_DC56:
 		bclr	#5,obStatus(a0)
 		bclr	#5,obStatus(a1)
 		move.w	#sfx_Spring,d0
-		jsr	(PlaySound_Special).l	; play spring sound
+		jsr	PlaySound_Special(pc)	; play spring sound
 
 Spring_AniLR:	; Routine $A
 		lea	Ani_Spring(pc),a1
@@ -178,7 +179,7 @@ Spring_BounceDwn:
 		bclr	#3,obStatus(a0)
 		clr.b	obSolid(a0)
 		move.w	#sfx_Spring,d0
-		jsr	(PlaySound_Special).l	; play spring sound
+		jsr	PlaySound_Special(pc)	; play spring sound
 
 Spring_AniDwn:	; Routine $10
 		lea	Ani_Spring(pc),a1

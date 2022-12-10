@@ -20,10 +20,10 @@ ReactToItem:
 		moveq	#$A,d5
 
 	@notducking:
-		move.w	#$10,d4
+		moveq	#$10,d4
 		add.w	d5,d5
 		lea	(v_objspace+$800).w,a1 ; set object RAM start address
-		move.w	#$5F,d6
+		moveq	#$5F,d6
 
 @loop:
 		tst.b	obRender(a1)
@@ -263,14 +263,14 @@ HurtSonic:
 		tst.w	(v_rings).w	; does Sonic have any rings?
 		beq.w	@norings	; if not, branch
 
-		jsr	(FindFreeObj).l
+		jsr	FindFreeObj(pc)
 		bne.s	@hasshield
 		move.b	#id_RingLoss,0(a1) ; load bouncing multi rings object
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)
 
 	@hasshield:
-		move.b	#0,(v_shield).w	; remove shield
+		clr.b	(v_shield).w	; remove shield
 		move.b	#4,obRoutine(a0)
 		bsr.w	Sonic_ResetOnFloor
 		bset	#1,obStatus(a0)
@@ -289,7 +289,7 @@ HurtSonic:
 		neg.w	obVelX(a0)	; if Sonic is right of the object, reverse
 
 	@isleft:
-		move.w	#0,obInertia(a0)
+		clr.w	obInertia(a0)
 		move.b	#id_Hurt,obAnim(a0)
 		move.w	#120,$30(a0)	; set temp invincible time to 2 seconds
 		move.w	#sfx_Death,d0	; load normal damage sound
@@ -300,9 +300,9 @@ HurtSonic:
 		move.w	#sfx_HitSpikes,d0 ; load spikes damage sound
 
 	@sound:
-		jsr	(PlaySound_Special).l
+		jsr	(PlaySound_Special).w
 		moveq	#-1,d0
-		rts	
+		rts
 ; ===========================================================================
 
 @norings:
@@ -335,11 +335,11 @@ KillSonic:
 		move.w	#sfx_HitSpikes,d0 ; play spikes death sound
 
 	@sound:
-		jsr	(PlaySound_Special).l
+		jsr	(PlaySound_Special).w
 
 	@dontdie:
 		moveq	#-1,d0
-		rts	
+		rts
 ; End of function KillSonic
 
 
@@ -357,7 +357,7 @@ React_Special:
 		beq.s	@D7orE1		; if yes, branch
 		cmpi.b	#$21,d1		; is collision type $E1	?
 		beq.s	@D7orE1		; if yes, branch
-		rts	
+		rts
 ; ===========================================================================
 
 @caterkiller:
@@ -396,5 +396,5 @@ React_Special:
 
 @D7orE1:
 		addq.b	#1,obColProp(a1)
-		rts	
+		rts
 ; End of function React_Special

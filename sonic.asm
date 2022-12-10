@@ -2231,7 +2231,7 @@ Level_LoadObj:
 		move.b	d0,(f_scorecount).w ; update score counter
 		move.b	d0,(f_ringcount).w ; update rings counter
 		move.b	d0,(f_timecount).w ; update time counter
-		move.w	#0,(v_btnpushtime1).w
+		clr.w	(v_btnpushtime1).w
 
 Level_ChkWaterPal:
 		moveq	#3,d1
@@ -2291,7 +2291,7 @@ Level_MainLoop:
 		bsr.w	SignpostArtLoad
 
 		cmpi.b	#id_Level,(v_gamemode).w
-		beq.w	Level_MainLoop	; if mode is $C (level), branch
+		beq.s	Level_MainLoop	; if mode is $C (level), branch
 		rts
 ; ===========================================================================
 

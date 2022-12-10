@@ -6,7 +6,7 @@
 
 
 Sonic_Animate:
-		lea	(Ani_Sonic).l,a1
+		lea	Ani_Sonic(pc),a1
 		moveq	#0,d0
 		move.b	obAnim(a0),d0
 		cmp.b	obNextAni(a0),d0 ; is animation set to restart?
@@ -39,7 +39,7 @@ Sonic_Animate:
 		addq.b	#1,obAniFrame(a0) ; next frame number
 
 	@delay:
-		rts	
+		rts
 ; ===========================================================================
 
 @end_FF:
@@ -66,7 +66,7 @@ Sonic_Animate:
 		move.b	2(a1,d1.w),obAnim(a0) ; read next byte, run that animation
 
 	@end:
-		rts	
+		rts
 ; ===========================================================================
 
 @walkrunroll:
@@ -100,11 +100,11 @@ Sonic_Animate:
 		neg.w	d2		; modulus speed
 
 	@nomodspeed:
-		lea	(SonAni_Run).l,a1 ; use	running	animation
+		lea	SonAni_Run(pc),a1 ; use	running	animation
 		cmpi.w	#$600,d2	; is Sonic at running speed?
 		bcc.s	@running	; if yes, branch
 
-		lea	(SonAni_Walk).l,a1 ; use walking animation
+		lea	SonAni_Walk(pc),a1 ; use walking animation
 		move.b	d0,d1
 		lsr.b	#1,d1
 		add.b	d1,d0
@@ -122,7 +122,7 @@ Sonic_Animate:
 		move.b	d2,obTimeFrame(a0) ; modify frame duration
 		bsr.w	@loadframe
 		add.b	d3,obFrame(a0)	; modify frame number
-		rts	
+		rts
 ; ===========================================================================
 
 @rolljump:
@@ -133,10 +133,10 @@ Sonic_Animate:
 		neg.w	d2
 
 	@nomodspeed2:
-		lea	(SonAni_Roll2).l,a1 ; use fast animation
+		lea	SonAni_Roll2(pc),a1 ; use fast animation
 		cmpi.w	#$600,d2	; is Sonic moving fast?
 		bcc.s	@rollfast	; if yes, branch
-		lea	(SonAni_Roll).l,a1 ; use slower	animation
+		lea	SonAni_Roll(pc),a1 ; use slower	animation
 
 	@rollfast:
 		neg.w	d2
@@ -161,13 +161,13 @@ Sonic_Animate:
 
 	@negspeed:
 		addi.w	#$800,d2
-		bpl.s	@belowmax3	
+		bpl.s	@belowmax3
 		moveq	#0,d2
 
 	@belowmax3:
 		lsr.w	#6,d2
 		move.b	d2,obTimeFrame(a0) ; modify frame duration
-		lea	(SonAni_Push).l,a1
+		lea	SonAni_Push(pc),a1
 		move.b	obStatus(a0),d1
 		andi.b	#1,d1
 		andi.b	#$FC,obRender(a0)

@@ -41,7 +41,7 @@ Bonus_Main:	; Routine 0
 		move.b	obSubtype(a0),obFrame(a0)
 		move.w	#119,bonus_timelen(a0) ; set display time to 2 seconds
 		move.w	#sfx_Bonus,d0
-		jsr	(PlaySound_Special).l	; play bonus sound
+		jsr	(PlaySound_Special).w	; play bonus sound
 		moveq	#0,d0
 		move.b	obSubtype(a0),d0
 		add.w	d0,d0
@@ -53,7 +53,7 @@ Bonus_Main:	; Routine 0
 		rts
 
 	@delete:
-		jmp	(DeleteObject).l
+		jmp	DeleteObject(pc)
 
 ; ===========================================================================
 @points:	dc.w 0			; Bonus	points array
@@ -66,7 +66,7 @@ Bonus_Display:	; Routine 2
 		subq.w	#1,bonus_timelen(a0) ; decrement display time
 		bmi.s	Bonus_Display_Delete		; if time is zero, branch
 		out_of_range.s	Bonus_Display_Delete
-		jmp	(DisplaySprite).l
+		jmp	DisplaySprite(pc)
 
 Bonus_Display_Delete:
-		jmp	(DeleteObject).l
+		jmp	DeleteObject(pc)

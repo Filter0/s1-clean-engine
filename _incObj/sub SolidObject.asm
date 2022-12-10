@@ -160,13 +160,13 @@ Solid_Centre:
 		bset	#5,obStatus(a1)	; make Sonic push object
 		bset	#5,obStatus(a0)	; make object be pushed
 		moveq	#1,d4		; return side collision
-		rts	
+		rts
 ; ===========================================================================
 
 Solid_SideAir:
 		bsr.s	Solid_NotPushing
 		moveq	#1,d4		; return side collision
-		rts	
+		rts
 ; ===========================================================================
 
 Solid_Ignore:
@@ -180,7 +180,7 @@ Solid_NotPushing:
 
 Solid_Debug:
 		moveq	#0,d4		; return no collision
-		rts	
+		rts
 ; ===========================================================================
 
 Solid_TopBottom:
@@ -202,7 +202,7 @@ Solid_Below:
 
 Solid_TopBtmAir:
 		moveq	#-1,d4
-		rts	
+		rts
 ; ===========================================================================
 
 Solid_Squash:
@@ -213,7 +213,7 @@ Solid_Squash:
 		jsr	(KillSonic).l	; kill Sonic
 		movea.l	(sp)+,a0
 		moveq	#-1,d4
-		rts	
+		rts
 ; ===========================================================================
 
 Solid_Landed:
@@ -235,12 +235,12 @@ Solid_Landed:
 		move.b	#2,obSolid(a0) ; set standing flags
 		bset	#3,obStatus(a0)
 		moveq	#-1,d4		; return top/bottom collision
-		rts	
+		rts
 ; ===========================================================================
 
 Solid_Miss:
 		moveq	#0,d4
-		rts	
+		rts
 ; End of function SolidObject
 
 
@@ -278,5 +278,5 @@ Solid_ResetFloor:
 	@notinair:
 		bset	#3,obStatus(a1)	; set object standing flag
 		bset	#3,obStatus(a0)	; set Sonic standing on object flag
-		rts	
+		rts
 ; End of function Solid_ResetFloor

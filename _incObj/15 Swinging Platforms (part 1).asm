@@ -30,7 +30,6 @@ Swing_Main:	; Routine 0
 		move.w	obX(a0),swing_origX(a0)
 
 @length:
-		move.b	0(a0),d4
 		moveq	#0,d1
 		lea	obSubtype(a0),a2 ; move chain length to a2
 		move.b	(a2),d1		; move a2 to d1
@@ -57,12 +56,13 @@ Swing_Main:	; Routine 0
 		andi.w	#$7F,d5
 		move.b	d5,(a2)+
 		move.b	#$A,obRoutine(a1) ; goto Swing_Display next
-		move.b	d4,0(a1)	; load swinging	object
+		move.b	0(a0),0(a1)	; load swinging	object
 		move.l	obMap(a0),obMap(a1)
 		move.w	obGfx(a0),obGfx(a1)
 		bclr	#6,obGfx(a1)
-		move.b	#4,obRender(a1)
-		move.b	#4,obPriority(a1)
+		moveq   #4,d0
+		move.b	d0,obRender(a1)
+		move.b	d0,obPriority(a1)
 		move.b	#8,obActWid(a1)
 		move.b	#1,obFrame(a1)
 		move.b	d3,$3C(a1)

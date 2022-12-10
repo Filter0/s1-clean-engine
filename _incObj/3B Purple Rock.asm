@@ -15,9 +15,10 @@ Rock_Main:	; Routine 0
 		addq.b	#4,obRoutine(a0)
 		move.l	#Map_PRock,obMap(a0)
 		move.w	#$63D0,obGfx(a0)
-		move.b	#4,obRender(a0)
+		moveq   #4,d0
+		move.b	d0,obRender(a0)
 		move.b	#$13,obActWid(a0)
-		move.b	#4,obPriority(a0)
+		move.b	d0,obPriority(a0)
 
 Rock_Solid:	; Routine 2
 		moveq	#$1B,d1

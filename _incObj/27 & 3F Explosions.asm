@@ -28,12 +28,13 @@ ExItem_Main:	; Routine 2
 		move.w	#$5A0,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#1,obPriority(a0)
-		move.b	#0,obColType(a0)
+		moveq   #0,d0
+		move.b	d0,obColType(a0)
 		move.b	#$C,obActWid(a0)
 		move.b	#7,obTimeFrame(a0) ; set frame duration to 7 frames
-		move.b	#0,obFrame(a0)
+		move.b	d0,obFrame(a0)
 		move.w	#sfx_BreakItem,d0
-		jsr	(PlaySound_Special).l	; play breaking enemy sound
+		jsr	PlaySound_Special(pc)	; play breaking enemy sound
 
 ExItem_Animate:	; Routine 4 (2 for ExplosionBomb)
 		subq.b	#1,obTimeFrame(a0) ; subtract 1 from frame duration
@@ -53,22 +54,22 @@ ExItem_Animate:	; Routine 4 (2 for ExplosionBomb)
 ExplosionBomb:
 		moveq	#0,d0
 		move.b	obRoutine(a0),d0
-		move.w	ExBom_Index(pc,d0.w),d1
-		jmp	ExBom_Index(pc,d1.w)
+		jmp	ExBom_Index(pc,d0.w)
 ; ===========================================================================
-ExBom_Index:	dc.w ExBom_Main-ExBom_Index
-		dc.w ExItem_Animate-ExBom_Index
+ExBom_Index:	bra.w   ExBom_Main
+		bra.w   ExItem_Animate
 ; ===========================================================================
 
 ExBom_Main:	; Routine 0
-		addq.b	#2,obRoutine(a0)
+		addq.b	#4,obRoutine(a0)
 		move.l	#Map_ExplodeBomb,obMap(a0)
 		move.w	#$5A0,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#1,obPriority(a0)
-		move.b	#0,obColType(a0)
+		moveq   #0,d0
+		move.b	d0,obColType(a0)
 		move.b	#$C,obActWid(a0)
 		move.b	#7,obTimeFrame(a0)
-		move.b	#0,obFrame(a0)
+		move.b	d0,obFrame(a0)
 		move.w	#sfx_Bomb,d0
-		jmp	(PlaySound_Special).l	; play exploding bomb sound
+		jmp	PlaySound_Special(pc)	; play exploding bomb sound

@@ -45,11 +45,11 @@ HUD_Update:
 		addq.b	#1,-(a1)	; increment 1/60s counter
 		cmpi.b	#60,(a1)	; check if passed 60
 		bcs.s	@chklives
-		move.b	#0,(a1)
+		clr.b	(a1)
 		addq.b	#1,-(a1)	; increment second counter
 		cmpi.b	#60,(a1)	; check if passed 60
 		bcs.s	@updatetime
-		move.b	#0,(a1)
+		clr.b	(a1)
 		addq.b	#1,-(a1)	; increment minute counter
 		cmpi.b	#9,(a1)		; check if passed 9
 		bcs.s	@updatetime
@@ -146,7 +146,7 @@ HudDebug:
 Hud_LoadZero:
 		locVRAM	$DF40
 		lea	Hud_TilesZero(pc),a2
-		move.w	#2,d2
+		moveq	#2,d2
 		bra.s	loc_1C83E
 ; End of function Hud_LoadZero
 
@@ -158,7 +158,7 @@ Hud_LoadZero:
 
 
 Hud_Base:
-		lea	($C00000).l,a6
+		lea	(vdp_data_port).l,a6
 		bsr.w	Hud_Lives
 		locVRAM	$DC40
 		lea	Hud_TilesBase(pc),a2

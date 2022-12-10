@@ -24,7 +24,7 @@ loc_1341C:
 		moveq	#0,d0
 		move.b	obAngle(a0),d0
 		subi.b	#$40,d0
-		jsr	(CalcSine).l
+		jsr	CalcSine(pc)
 		muls.w	d2,d1
 		asr.l	#8,d1
 		add.w	d1,obVelX(a0)	; make Sonic jump
@@ -37,7 +37,7 @@ loc_1341C:
 		move.b	#1,$3C(a0)
 		clr.b	$38(a0)
 		move.w	#sfx_Jump,d0
-		jsr	(PlaySound_Special).l	; play jumping sound
+		jsr	PlaySound_Special(pc)	; play jumping sound
 		move.b	#$13,obHeight(a0)
 		move.b	#9,obWidth(a0)
 		btst	#2,obStatus(a0)
@@ -49,10 +49,10 @@ loc_1341C:
 		addq.w	#5,obY(a0)
 
 locret_1348E:
-		rts	
+		rts
 ; ===========================================================================
 
 loc_13490:
 		bset	#4,obStatus(a0)
-		rts	
+		rts
 ; End of function Sonic_Jump

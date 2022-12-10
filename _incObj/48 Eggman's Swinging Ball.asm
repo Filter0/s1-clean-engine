@@ -101,14 +101,14 @@ loc_17BFA:
 GBall_Display:
 		bsr.s	sub_17C2A
 		move.b	obAngle(a0),d0
-		jsr	(Swing_Move2).l
-		jmp	(DisplaySprite).l
+		jsr	Swing_Move2(pc)
+		jmp	DisplaySprite(pc)
 ; ===========================================================================
 
 GBall_Display2:	; Routine 4
 		bsr.s	sub_17C2A
 		jsr	Obj48_Move(pc)
-		jmp	(DisplaySprite).l
+		jmp	DisplaySprite(pc)
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
@@ -144,7 +144,7 @@ loc_17C68:	; Routine 6
 		move.b	#0,obRoutine(a0)
 
 GBall_Display3:
-		jmp	(DisplaySprite).l
+		jmp	DisplaySprite(pc)
 ; ===========================================================================
 
 GBall_ChkVanish:; Routine 8
@@ -166,4 +166,4 @@ GBall_Vanish:
 		move.b	#0,obRoutine(a0)
 
 GBall_Display4:
-		jmp	(DisplaySprite).l
+		jmp	DisplaySprite(pc)

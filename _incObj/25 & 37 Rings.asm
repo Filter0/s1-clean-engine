@@ -114,9 +114,9 @@ Ring_Animate:	; Routine 2
 
 Ring_Collect:	; Routine 4
 		addq.b	#2,obRoutine(a0)
-		move.b	#0,obColType(a0)
+		clr.b	obColType(a0)
 		move.b	#1,obPriority(a0)
-		bsr.w	CollectRing
+		bsr.s	CollectRing
 		lea	(v_objstate).w,a2
 		moveq	#0,d0
 		move.b	obRespawnNo(a0),d0
@@ -154,7 +154,7 @@ CollectRing:
 		move.w	#bgm_ExtraLife,d0 ; play extra life music
 
 	@playsnd:
-		jmp	(PlaySound_Special).l
+		jmp	PlaySound_Special(pc)
 ; End of function CollectRing
 
 ; ===========================================================================
@@ -232,11 +232,12 @@ RLoss_Count:	; Routine 0
 		dbf	d5,@loop	; repeat for number of rings (max 31)
 
 @resetcounter:
-		move.w	#0,(v_rings).w	; reset number of rings to zero
+		moveq   #0,d0
+                move.w	d0,(v_rings).w	; reset number of rings to zero
 		move.b	#$80,(f_ringcount).w ; update ring counter
-		move.b	#0,(v_lifecount).w
+		move.b	d0,(v_lifecount).w
 		move.w	#sfx_RingLoss,d0
-		jsr	(PlaySound_Special).l	; play ring loss sound
+		jsr	PlaySound_Special(pc)	; play ring loss sound
 
 RLoss_Bounce:	; Routine 2
 		move.b	(v_ani3_frame).w,obFrame(a0)

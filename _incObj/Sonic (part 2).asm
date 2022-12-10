@@ -3,7 +3,7 @@
 ; ---------------------------------------------------------------------------
 
 Sonic_Hurt:	; Routine 4
-		jsr	(SpeedToPos).l
+		jsr	SpeedToPos(pc)
 		addi.w	#$30,obVelY(a0)
 		btst	#6,obStatus(a0)
 		beq.s	loc_1380C
@@ -15,7 +15,7 @@ loc_1380C:
 		bsr.w	Sonic_RecordPosition
 		bsr.w	Sonic_Animate
 		bsr.w	Sonic_LoadGfx
-		jmp	(DisplaySprite).l
+		jmp	DisplaySprite(pc)
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to	stop Sonic falling after he's been hurt
@@ -50,11 +50,11 @@ locret_13860:
 
 Sonic_Death:	; Routine 6
 		bsr.s	GameOver
-		jsr	(ObjectFall).l
+		jsr	ObjectFall(pc)
 		bsr.w	Sonic_RecordPosition
 		bsr.w	Sonic_Animate
 		bsr.w	Sonic_LoadGfx
-		jmp	(DisplaySprite).l
+		jmp	DisplaySprite(pc)
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
@@ -78,9 +78,9 @@ GameOver:
 
 loc_138C2:
 		move.w	#bgm_GameOver,d0
-		jsr	(PlaySound).l	; play game over music
+		jsr	(PlaySound).w	; play game over music
 		moveq	#plcid_GameOver,d0
-		jmp	(AddPLC).l	; load game over patterns
+		jmp	(AddPLC).w	; load game over patterns
 ; ===========================================================================
 
 loc_138D4:

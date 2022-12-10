@@ -8,7 +8,7 @@
 Sonic_Floor:
 		move.w	obVelX(a0),d1
 		move.w	obVelY(a0),d2
-		jsr	(CalcAngle).l
+		jsr	CalcAngle(pc)
 		subi.b	#$20,d0
 		andi.b	#$C0,d0
 		cmpi.b	#$40,d0

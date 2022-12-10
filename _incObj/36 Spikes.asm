@@ -5,11 +5,10 @@
 Spikes:
 		moveq	#0,d0
 		move.b	obRoutine(a0),d0
-		move.w	Spik_Index(pc,d0.w),d1
-		jmp	Spik_Index(pc,d1.w)
+		jmp	Spik_Index(pc,d0.w)
 ; ===========================================================================
-Spik_Index:	dc.w Spik_Main-Spik_Index
-		dc.w Spik_Solid-Spik_Index
+Spik_Index:	bra.w   Spik_Main
+		bra.w   Spik_Solid
 
 spik_origX:	equ $30		; start X position
 spik_origY:	equ $32		; start Y position
@@ -23,7 +22,7 @@ Spik_Var:	dc.b 0,	$14		; frame	number,	object width
 ; ===========================================================================
 
 Spik_Main:	; Routine 0
-		addq.b	#2,obRoutine(a0)
+		addq.b	#4,obRoutine(a0)
 		move.l	#Map_Spike,obMap(a0)
 		move.w	#$51B,obGfx(a0)
 		ori.b	#4,obRender(a0)
