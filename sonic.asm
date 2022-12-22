@@ -1739,9 +1739,9 @@ GM_Title:
 	@isjap:
 		move.b	#id_PSBTM,(v_objspace+$100).w ; load object which hides part of Sonic
 		move.b	#2,(v_objspace+$100+obFrame).w
-		jsr	ExecuteObjects(pc)
+		bsr.w	ExecuteObjects
 		bsr.w	DeformLayers
-		jsr	BuildSprites(pc)
+		bsr.w	BuildSprites
 		moveq	#plcid_Main,d0
 		bsr.w	NewPLC
 		moveq   #0,d0
@@ -1755,9 +1755,9 @@ GM_Title:
 Tit_MainLoop:
 		move.b	#id_VBla_04,(v_vbla_routine).w
 		bsr.w	WaitForVBla
-		jsr	ExecuteObjects(pc)
+		bsr.w	ExecuteObjects
 		bsr.w	DeformLayers
-		jsr	BuildSprites(pc)
+		bsr.w	BuildSprites
 		bsr.w	PCycle_Title
 		bsr.w	RunPLC
 		addq.w	#2,(v_objspace+obX).w ; move Sonic to the right
@@ -2207,9 +2207,9 @@ Level_ChkWater:
 		move.w	d0,(v_jpadhold1).w
 
 Level_LoadObj:
-		jsr	ObjPosLoad(pc)
-		jsr	ExecuteObjects(pc)
-		jsr	BuildSprites(pc)
+		bsr.w	ObjPosLoad
+		bsr.w	ExecuteObjects
+		bsr.w	BuildSprites
 		moveq	#0,d0
 		tst.b	(v_lastlamp).w	; are you starting from	a lamppost?
 		bne.s	Level_SkipClr	; if yes, branch
@@ -2270,7 +2270,7 @@ Level_MainLoop:
 		move.b	#id_VBla_06,(v_vbla_routine).w
 		bsr.w	WaitForVBla
 		addq.w	#1,(v_framecount).w ; add 1 to level timer
-		jsr	ExecuteObjects(pc)
+		bsr.w	ExecuteObjects
 		tst.w   (f_restart).w
 		bne.w   GM_Level
 		tst.w	(v_debuguse).w	; is debug mode being used?
@@ -2282,8 +2282,8 @@ Level_MainLoop:
 		bsr.w	DeformLayers
 
 	Level_SkipScroll:
-		jsr	BuildSprites(pc)
-		jsr	ObjPosLoad(pc)
+		bsr.w	BuildSprites
+		bsr.w	ObjPosLoad
 		bsr.w	PaletteCycle
 		bsr.w	RunPLC
 		bsr.w	OscillateNumDo
@@ -2483,7 +2483,7 @@ loc_6938:
 		bsr.w	Calc_VRAM_Pos
 		moveq	#-16,d4
 		move.w	#320,d5
-		bsr.w	DrawBlocks_TB
+		bra.w	DrawBlocks_TB
 
 locret_6952:
 		rts
@@ -2561,7 +2561,7 @@ locj_6D88:
 		move.w	#224,d4
 		moveq	#0,d5
 		moveq	#(512/16)-1,d6
-		bsr.w	DrawBlocks_LR_3
+		bra.w	DrawBlocks_LR_3
 
 locret_69F2:
 		rts
@@ -2575,8 +2575,6 @@ locret_69F2:
 DrawBGScrollBlock2:
 		tst.b	(a2)
 		beq.w	locj_6DF2
-		cmpi.b	#id_SBZ,(v_zone).w
-		beq.w	Draw_SBz
 		bclr	#0,(a2)
 		beq.s	locj_6DD2
 		; Draw new tiles on the left
@@ -2597,7 +2595,7 @@ locj_6DD2:
 		move.w	#224/2,d4
 		move.w	#320,d5
 		moveq	#3-1,d6
-		bsr.w	DrawBlocks_TB_2
+		bra.w	DrawBlocks_TB_2
 locj_6DF2:
 		rts
 ;===============================================================================
@@ -2606,67 +2604,10 @@ locj_6DF4:
 		dc.b $04,$04,$04,$04,$04,$04,$02,$02,$02,$02,$02,$02,$02,$02,$02,$02
 		dc.b $02,$00
 ;===============================================================================
-Draw_SBz:
-		moveq	#-16,d4
-		bclr	#0,(a2)
-		bne.s	locj_6E28
-		bclr	#1,(a2)
-		beq.s	locj_6E72
-		move.w	#224,d4
-locj_6E28:
-		lea	(locj_6DF4+1).l,a0
-		move.w	(v_bgscreenposy).w,d0
-		add.w	d4,d0
-		andi.w	#$1F0,d0
-		lsr.w	#4,d0
-		move.b	(a0,d0.w),d0
-		lea	(locj_6FE4).l,a3
-		movea.w	(a3,d0.w),a3
-		beq.s	locj_6E5E
-		moveq	#-16,d5
-		movem.l	d4/d5,-(sp)
-		bsr.w	Calc_VRAM_Pos
-		movem.l	(sp)+,d4/d5
-		bsr.w	DrawBlocks_LR
-		bra.s	locj_6E72
-;===============================================================================
-locj_6E5E:
-		moveq	#0,d5
-		movem.l	d4/d5,-(sp)
-		bsr.w	Calc_VRAM_Pos_2
-		movem.l	(sp)+,d4/d5
-		moveq	#(512/16)-1,d6
-		bsr.w	DrawBlocks_LR_3
-locj_6E72:
-		tst.b	(a2)
-		bne.s	locj_6E78
-		rts
-;===============================================================================
-locj_6E78:
-		moveq	#-16,d4
-		moveq	#-16,d5
-		move.b	(a2),d0
-		andi.b	#$A8,d0
-		beq.s	locj_6E8C
-		lsr.b	#1,d0
-		move.b	d0,(a2)
-		move.w	#320,d5
-locj_6E8C:
-		lea	(locj_6DF4).l,a0
-		move.w	(v_bgscreenposy).w,d0
-		andi.w	#$1F0,d0
-		lsr.w	#4,d0
-		lea	(a0,d0.w),a0
-		bra.w	locj_6FEC
-;===============================================================================
-
-
 ; locj_6EA4:
 DrawBGScrollBlock3:
 		tst.b	(a2)
 		beq.w	locj_6EF0
-		cmpi.b	#id_MZ,(v_zone).w
-		beq.w	Draw_Mz
 		bclr	#0,(a2)
 		beq.s	locj_6ED0
 		; Draw new tiles on the left
@@ -2687,7 +2628,7 @@ locj_6ED0:
 		move.w	#$40,d4
 		move.w	#320,d5
 		moveq	#3-1,d6
-		bsr.w	DrawBlocks_TB_2
+		bra.w	DrawBlocks_TB_2
 locj_6EF0:
 		rts
 locj_6EF2:
@@ -2698,60 +2639,6 @@ locj_6EF2:
 		dc.b $02,$02,$02,$02,$02,$02,$02,$02,$02,$02,$02,$02,$02,$02,$02,$02
 		dc.b $02,$02,$02,$02,$02,$02,$02,$02,$02,$02,$02,$02,$02,$02,$02,$02
 		dc.b $02,$00
-;===============================================================================
-Draw_Mz:
-		moveq	#-16,d4
-		bclr	#0,(a2)
-		bne.s	locj_6F66
-		bclr	#1,(a2)
-		beq.s	locj_6FAE
-		move.w	#224,d4
-locj_6F66:
-		lea	(locj_6EF2+1).l,a0
-		move.w	(v_bgscreenposy).w,d0
-		subi.w	#$200,d0
-		add.w	d4,d0
-		andi.w	#$7F0,d0
-		lsr.w	#4,d0
-		move.b	(a0,d0.w),d0
-		movea.w	locj_6FE4(pc,d0.w),a3
-		beq.s	locj_6F9A
-		moveq	#-16,d5
-		movem.l	d4/d5,-(sp)
-		bsr.w	Calc_VRAM_Pos
-		movem.l	(sp)+,d4/d5
-		bsr.w	DrawBlocks_LR
-		bra.s	locj_6FAE
-;===============================================================================
-locj_6F9A:
-		moveq	#0,d5
-		movem.l	d4/d5,-(sp)
-		bsr.w	Calc_VRAM_Pos_2
-		movem.l	(sp)+,d4/d5
-		moveq	#(512/16)-1,d6
-		bsr.w	DrawBlocks_LR_3
-locj_6FAE:
-		tst.b	(a2)
-		bne.s	locj_6FB4
-		rts
-;===============================================================================
-locj_6FB4:
-		moveq	#-16,d4
-		moveq	#-16,d5
-		move.b	(a2),d0
-		andi.b	#$A8,d0
-		beq.s	locj_6FC8
-		lsr.b	#1,d0
-		move.b	d0,(a2)
-		move.w	#320,d5
-locj_6FC8:
-		lea	(locj_6EF2).l,a0
-		move.w	(v_bgscreenposy).w,d0
-		subi.w	#$200,d0
-		andi.w	#$7F0,d0
-		lsr.w	#4,d0
-		lea	(a0,d0.w),a0
-		bra.w	locj_6FEC
 ;===============================================================================
 locj_6FE4:
 		dc.w v_bgscreenposx_dup, v_bgscreenposx_dup, v_bg2screenposx_dup, v_bg3screenposx_dup
@@ -3017,13 +2904,7 @@ LoadTilesFromStart:
 		lea	(v_lvllayout+$40).w,a4
 		move.w	#$6000,d2
 		tst.b	(v_zone).w
-		beq.w	Draw_GHz_Bg
-		cmpi.b	#id_MZ,(v_zone).w
-		beq.w	Draw_Mz_Bg
-		cmpi.w	#(id_SBZ<<8)+0,(v_zone).w
-		beq.w	Draw_SBz_Bg
-		cmpi.b	#id_EndZ,(v_zone).w
-		beq.w	Draw_GHz_Bg
+		beq.s	Draw_GHz_Bg
 ; End of function LoadTilesFromStart
 
 
@@ -3058,44 +2939,13 @@ locj_7224:
 		move.w	(v_bgscreenposy).w,d0
 		add.w	d4,d0
 		andi.w	#$F0,d0
-		bsr.w	locj_72Ba
+		bsr.s	locj_72Ba
 		movem.l	(sp)+,d4-d6
 		addi.w	#16,d4
 		dbf	d6,locj_7224
 		rts
 locj_724a:
 		dc.b $00,$00,$00,$00,$06,$06,$06,$04,$04,$04,$00,$00,$00,$00,$00,$00
-;-------------------------------------------------------------------------------
-Draw_Mz_Bg:;locj_725a:
-		moveq	#-16,d4
-		moveq	#((224+16+16)/16)-1,d6
-locj_725E:
-		movem.l	d4-d6,-(sp)
-		lea	(locj_6EF2+1),a0
-		move.w	(v_bgscreenposy).w,d0
-		subi.w	#$200,d0
-		add.w	d4,d0
-		andi.w	#$7F0,d0
-		bsr.w	locj_72Ba
-		movem.l	(sp)+,d4-d6
-		addi.w	#16,d4
-		dbf	d6,locj_725E
-		rts
-;-------------------------------------------------------------------------------
-Draw_SBz_Bg:;locj_7288:
-		moveq	#-16,d4
-		moveq	#((224+16+16)/16)-1,d6
-locj_728C:
-		movem.l	d4-d6,-(sp)
-		lea	(locj_6DF4+1),a0
-		move.w	(v_bgscreenposy).w,d0
-		add.w	d4,d0
-		andi.w	#$1F0,d0
-		bsr.w	locj_72Ba
-		movem.l	(sp)+,d4-d6
-		addi.w	#16,d4
-		dbf	d6,locj_728C
-		rts
 ;-------------------------------------------------------------------------------
 locj_72B2:
 		dc.w v_bgscreenposx, v_bgscreenposx, v_bg2screenposx, v_bg3screenposx
@@ -3116,7 +2966,7 @@ locj_72da:
 		bsr.w	Calc_VRAM_Pos_2
 		movem.l	(sp)+,d4/d5
 		moveq	#(512/16)-1,d6
-		bsr.w	DrawBlocks_LR_3
+		bra.w	DrawBlocks_LR_3
 locj_72EE:
 		rts
 
@@ -4545,25 +4395,23 @@ Sonic_MdNormal:
 		bsr.w	Sonic_Move
 		bsr.w	Sonic_Roll
 		bsr.w	Sonic_LevelBound
-		jsr	SpeedToPos(pc)
+		bsr.w	SpeedToPos
 		bsr.w	Sonic_AnglePos
-		bsr.w	Sonic_SlopeRepel
-		rts
+		bra.w	Sonic_SlopeRepel
 ; ===========================================================================
 
 Sonic_MdJump:
 		bsr.w	Sonic_JumpHeight
 		bsr.w	Sonic_JumpDirection
 		bsr.w	Sonic_LevelBound
-		jsr	ObjectFall(pc)
+		bsr.w	ObjectFall
 		btst	#6,obStatus(a0)
 		beq.s	loc_12E5C
 		subi.w	#$28,obVelY(a0)
 
 loc_12E5C:
 		bsr.w	Sonic_JumpAngle
-		bsr.w	Sonic_Floor
-		rts
+		bra.w	Sonic_Floor
 ; ===========================================================================
 
 Sonic_MdRoll:
@@ -4571,10 +4419,9 @@ Sonic_MdRoll:
 		bsr.w	Sonic_RollRepel
 		bsr.w	Sonic_RollSpeed
 		bsr.w	Sonic_LevelBound
-		jsr	SpeedToPos(pc)
+		bsr.w	SpeedToPos
 		bsr.w	Sonic_AnglePos
-		bsr.w	Sonic_SlopeRepel
-		rts
+		bra.w	Sonic_SlopeRepel
 
 		include	"_incObj\Sonic Move.asm"
 		include	"_incObj\Sonic RollSpeed.asm"
