@@ -38,6 +38,6 @@ SmashObject:
 
 	@playsnd:
 		move.w	#sfx_WallSmash,d0
-		jmp	PlaySound_Special(pc) ; play smashing sound
+		bra.w	PlaySound_Special ; play smashing sound
 
 ; End of function SmashObject

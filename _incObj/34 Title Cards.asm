@@ -115,11 +115,11 @@ Card_ChangeArt:
 		cmpi.b	#4,obRoutine(a0)
 		bne.s	Card_Delete
 		moveq	#plcid_Explode,d0
-		jsr	AddPLC(pc)	; load explosion patterns
+		bsr.w	AddPLC	; load explosion patterns
 		moveq	#0,d0
 		move.b	(v_zone).w,d0
 		addi.w	#plcid_GHZAnimals,d0
-		jsr	AddPLC(pc)	; load animal patterns
+		bsr.w	AddPLC	; load animal patterns
 
 Card_Delete:
 		bra.w	DeleteObject

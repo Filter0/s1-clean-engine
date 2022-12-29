@@ -119,7 +119,7 @@ Got_ChkBonus:
 		tst.w	d0		; is there any bonus?
 		bne.s	Got_AddBonus	; if yes, branch
 		move.w	#sfx_Cash,d0
-		jsr	PlaySound_Special(pc)	; play "ker-ching" sound
+		bsr.w	PlaySound_Special	; play "ker-ching" sound
 		addq.b	#2,obRoutine(a0)
 		cmpi.w	#(id_SBZ<<8)+1,(v_zone).w
 		bne.s	Got_SetDelay
@@ -133,12 +133,12 @@ locret_C692:
 ; ===========================================================================
 
 Got_AddBonus:
-		jsr	AddPoints(pc)
+		bsr.w	AddPoints
 		move.b	(v_vbla_byte).w,d0
 		andi.b	#3,d0
 		bne.s	locret_C692
 		move.w	#sfx_Switch,d0
-		jmp	PlaySound_Special(pc)	; play "blip" sound
+		bra.w	PlaySound_Special	; play "blip" sound
 ; ===========================================================================
 
 Got_NextLevel:	; Routine $A

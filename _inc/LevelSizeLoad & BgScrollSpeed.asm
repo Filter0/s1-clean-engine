@@ -16,7 +16,7 @@ LevelSizeLoad:
 		add.w	d1,d0
 		lea	LevelSizeArray(pc,d0.w),a0 ; load level	boundaries
 		move.w	(a0)+,d0
-		move.w	d0,($FFFFF730).w
+		move.w	d0,(v_limitbtm2+2).w
 		move.l	(a0)+,d0
 		move.l	d0,(v_limitleft2).w
 		move.l	d0,(v_limitleft1).w
@@ -26,7 +26,7 @@ LevelSizeLoad:
 		move.w	(v_limitleft2).w,d0
 		addi.w	#$240,d0
 		move.w	d0,(v_limitleft3).w
-		move.w	#$1010,($FFFFF74A).w
+		move.w	#$1010,(v_fg_xblock).w
 		move.w	(a0)+,d0
 		move.w	d0,(v_lookshift).w
 		bra.s	LevSz_ChkLamp
@@ -149,7 +149,7 @@ BgScroll_GHZ:
 		move.l	d0,(v_bgscreenposy).w
 		move.l	d0,(v_bg2screenposy).w
 		move.l	d0,(v_bg3screenposy).w
-		lea	($FFFFA800).w,a2
+		lea	(v_bgscroll_buffer).w,a2
 		move.l	d0,(a2)+
 		move.l	d0,(a2)+
 		move.l	d0,(a2)+

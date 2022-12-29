@@ -281,6 +281,7 @@ v_shield:	equ $FFFFFE2C	; shield status (00 = no; 01 = yes)
 v_invinc:	equ $FFFFFE2D	; invinciblity status (00 = no; 01 = yes)
 v_shoes:		equ $FFFFFE2E	; speed shoes status (00 = no; 01 = yes)
 v_lastlamp:	equ $FFFFFE30	; number of the last lamppost you hit
+v_lamp_pos:     equ v_lastlamp+1	; position for lamppost (1 byte)
 v_lamp_xpos:	equ v_lastlamp+2	; x-axis for Sonic to respawn at lamppost (2 bytes)
 v_lamp_ypos:	equ v_lastlamp+4	; y-axis for Sonic to respawn at lamppost (2 bytes)
 v_lamp_rings:	equ v_lastlamp+6	; rings stored at lamppost (2 bytes)
@@ -289,6 +290,12 @@ v_lamp_dle:	equ v_lastlamp+$C	; dynamic level event routine counter at lamppost
 v_lamp_limitbtm:	equ v_lastlamp+$E	; level bottom boundary at lamppost (2 bytes)
 v_lamp_scrx:	equ v_lastlamp+$10 ; x-axis screen at lamppost (2 bytes)
 v_lamp_scry:	equ v_lastlamp+$12 ; y-axis screen at lamppost (2 bytes)
+v_lamp_bgscrx:  equ v_lastlamp+$14
+v_lamp_bgscry:  equ v_lastlamp+$16
+v_lamp_bg2scrx: equ v_lastlamp+$18
+v_lamp_bg2scry: equ v_lastlamp+$1A
+v_lamp_bg3scrx: equ v_lastlamp+$1C
+v_lamp_bg3scry: equ v_lastlamp+$1E
 
 v_lamp_wtrpos:	equ v_lastlamp+$20 ; water position at lamppost (2 bytes)
 v_lamp_wtrrout:	equ v_lastlamp+$22 ; water routine at lamppost

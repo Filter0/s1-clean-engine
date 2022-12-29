@@ -20,7 +20,7 @@ WSnd_PlaySnd:	; Routine 2
 		andi.b	#$3F,d0
 		bne.s	WSnd_ChkDel
 		move.w	#sfx_Waterfall,d0
-		jsr	PlaySound_Special(pc)	; play waterfall sound
+		bsr.w	PlaySound_Special	; play waterfall sound
 
 	WSnd_ChkDel:
 		out_of_range.w	DeleteObject

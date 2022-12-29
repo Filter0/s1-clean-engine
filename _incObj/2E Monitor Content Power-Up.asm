@@ -57,7 +57,7 @@ Pow_ChkSonic:
 		addq.b	#1,(v_lives).w	; add 1 to the number of lives you have
 		addq.b	#1,(f_lifecount).w ; update the lives counter
 		move.w	#bgm_ExtraLife,d0
-		jmp	PlaySound(pc)	; play extra life music
+		bra.w	PlaySound	; play extra life music
 ; ===========================================================================
 
 Pow_ChkShoes:
@@ -70,7 +70,7 @@ Pow_ChkShoes:
 		move.w	#$18,(v_sonspeedacc).w	; change Sonic's acceleration
 		move.w	#$80,(v_sonspeeddec).w	; change Sonic's deceleration
 		move.w	#bgm_Speedup,d0
-		jmp	PlaySound(pc)		; Speed	up the music
+		bra.w	PlaySound		; Speed	up the music
 ; ===========================================================================
 
 Pow_ChkShield:
@@ -80,7 +80,7 @@ Pow_ChkShield:
 		move.b	#1,(v_shield).w	; give Sonic a shield
 		move.b	#id_ShieldItem,(v_objspace+$180).w ; load shield object ($38)
 		move.w	#sfx_Shield,d0
-		jmp	PlaySound(pc)	; play shield sound
+		bra.w	PlaySound	; play shield sound
 ; ===========================================================================
 
 Pow_ChkInvinc:
@@ -102,7 +102,7 @@ Pow_ChkInvinc:
 		cmpi.w	#$C,(v_air).w
 		bls.s	Pow_NoMusic
 		move.w	#bgm_Invincible,d0
-		jmp	PlaySound(pc) ; play invincibility music
+		bra.w	PlaySound ; play invincibility music
 ; ===========================================================================
 
 Pow_NoMusic:
@@ -126,7 +126,7 @@ Pow_ChkRings:
 
 	Pow_RingSound:
 		move.w	#sfx_Ring,d0
-		jmp	PlaySound(pc)	; play ring sound
+		bra.w	PlaySound	; play ring sound
 ; ===========================================================================
 
 Pow_ChkS:

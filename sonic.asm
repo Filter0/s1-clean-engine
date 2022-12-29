@@ -259,7 +259,7 @@ GameProgram:
 		beq.s	GameInit	; if yes, branch
 
 CheckSumCheck:
-		lea	($FFFFFE00).w,a6
+		lea	(v_systemstack).w,a6
 		moveq	#0,d7
 		moveq	#$7F,d6
 	@clearRAM:
@@ -2174,8 +2174,8 @@ Level_LoadPal:
 Level_TtlCardLoop:
 		move.b	#id_VBla_08,(v_vbla_routine).w
 		bsr.w	WaitForVBla
-		jsr	ExecuteObjects(pc)
-		jsr	BuildSprites(pc)
+		bsr.w	ExecuteObjects
+		bsr.w	BuildSprites
 		bsr.w	RunPLC
 		move.w	(v_objspace+$108).w,d0
 		cmp.w	(v_objspace+$130).w,d0 ; has title card sequence finished?
@@ -4360,7 +4360,7 @@ loc_12C7E:
 		bsr.s	Sonic_Display
 		bsr.w	Sonic_RecordPosition
 		move.b	(v_anglebuffer).w,$36(a0)
-		move.b	($FFFFF76A).w,$37(a0)
+		move.b	(v_anglebuffer+2).w,$37(a0)
 		bsr.w	Sonic_Animate
 		tst.b	(f_lockmulti).w
 		bmi.s	loc_12CB6
@@ -4470,7 +4470,7 @@ Sonic_WalkSpeed:
 		swap	d2
 		swap	d3
 		move.b	d0,(v_anglebuffer).w
-		move.b	d0,($FFFFF76A).w
+		move.b	d0,(v_anglebuffer+2).w
 		move.b	d0,d1
 		addi.b	#$20,d0
 		bpl.s	loc_14D1A
@@ -4513,7 +4513,7 @@ loc_14D3C:
 
 sub_14D48:
 		move.b	d0,(v_anglebuffer).w
-		move.b	d0,($FFFFF76A).w
+		move.b	d0,(v_anglebuffer+2).w
 		addi.b	#$20,d0
 		andi.b	#$C0,d0
 		cmpi.b	#$40,d0
@@ -4557,7 +4557,7 @@ Sonic_HitFloor:
 		move.b	obWidth(a0),d0
 		ext.w	d0
 		sub.w	d0,d3
-		lea	($FFFFF76A).w,a4
+		lea	(v_anglebuffer+2).w,a4
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$D,d5
@@ -4566,7 +4566,7 @@ Sonic_HitFloor:
 		move.b	#0,d2
 
 loc_14DD0:
-		move.b	($FFFFF76A).w,d3
+		move.b	(v_anglebuffer+2).w,d3
 		cmp.w	d0,d1
 		ble.s	loc_14DDE
 		move.b	(v_anglebuffer).w,d3
@@ -4633,7 +4633,7 @@ sub_14E50:
 		move.b	obHeight(a0),d0
 		ext.w	d0
 		add.w	d0,d3
-		lea	($FFFFF76A).w,a4
+		lea	(v_anglebuffer+2).w,a4
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$E,d5
@@ -4725,7 +4725,7 @@ Sonic_DontRunOnWalls:
 		move.b	obWidth(a0),d0
 		ext.w	d0
 		sub.w	d0,d3
-		lea	($FFFFF76A).w,a4
+		lea	(v_anglebuffer+2).w,a4
 		movea.w	#-$10,a3
 		move.w	#$1000,d6
 		moveq	#$E,d5
@@ -4802,7 +4802,7 @@ loc_14FD6:
 		ext.w	d0
 		sub.w	d0,d3
 		eori.w	#$F,d3
-		lea	($FFFFF76A).w,a4
+		lea	(v_anglebuffer+2).w,a4
 		movea.w	#-$10,a3
 		move.w	#$800,d6
 		moveq	#$E,d5
@@ -4880,7 +4880,7 @@ BossDefeated:
 		move.b	(v_vbla_byte).w,d0
 		andi.b	#7,d0
 		bne.s	locret_178A2
-		jsr	FindFreeObj(pc)
+		bsr.w	FindFreeObj
 		bne.s	locret_178A2
 		move.b	#id_ExplosionBomb,0(a1)	; load explosion object
 		move.w	obX(a0),obX(a1)
