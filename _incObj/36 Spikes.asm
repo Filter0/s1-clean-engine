@@ -145,7 +145,7 @@ Spik_Wait:
 		tst.b	obRender(a0)
 		bpl.s	locret_CFE6
 		move.w	#sfx_SpikesMove,d0
-		jmp	(PlaySound_Special).l	; play "spikes moving" sound
+		bra.w	PlaySound_Special	; play "spikes moving" sound
 ; ===========================================================================
 
 loc_CFA4:

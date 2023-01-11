@@ -81,7 +81,7 @@ Lamp_Blue:	; Routine 2
 		move.w	#sfx_Lamppost,d0
 		jsr	(PlaySound_Special).w	; play lamppost sound
 		addq.b	#2,obRoutine(a0)
-		jsr	FindFreeObj(pc)
+		bsr.w	FindFreeObj
 		bne.s	@fail
 		move.b	#id_Lamppost,0(a1)	; load twirling	lamp object
 		move.b	#6,obRoutine(a1) ; goto Lamp_Twirl next

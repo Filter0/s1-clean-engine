@@ -8,7 +8,7 @@
 Sonic_Floor:
 		move.w	obVelX(a0),d1
 		move.w	obVelY(a0),d2
-		jsr	CalcAngle(pc)
+		bsr.w	CalcAngle
 		subi.b	#$20,d0
 		andi.b	#$C0,d0
 		cmpi.b	#$40,d0
@@ -101,7 +101,7 @@ loc_1369A:
 		move.w	#0,obVelY(a0)
 
 locret_136B2:
-		rts	
+		rts
 ; ===========================================================================
 
 loc_136B4:
@@ -118,7 +118,7 @@ loc_136B4:
 		move.w	obVelX(a0),obInertia(a0)
 
 locret_136E0:
-		rts	
+		rts
 ; ===========================================================================
 
 loc_136E2:
@@ -145,7 +145,7 @@ loc_13706:
 		andi.b	#$40,d0
 		bne.s	loc_13726
 		move.w	#0,obVelY(a0)
-		rts	
+		rts
 ; ===========================================================================
 
 loc_13726:
@@ -157,7 +157,7 @@ loc_13726:
 		neg.w	obInertia(a0)
 
 locret_1373C:
-		rts	
+		rts
 ; ===========================================================================
 
 loc_1373E:
@@ -167,7 +167,7 @@ loc_1373E:
 		add.w	d1,obX(a0)
 		move.w	#0,obVelX(a0)
 		move.w	obVelY(a0),obInertia(a0)
-		rts	
+		rts
 ; ===========================================================================
 
 loc_13758:
@@ -180,7 +180,7 @@ loc_13758:
 		move.w	#0,obVelY(a0)
 
 locret_13770:
-		rts	
+		rts
 ; ===========================================================================
 
 loc_13772:
@@ -197,5 +197,5 @@ loc_13772:
 		move.w	obVelX(a0),obInertia(a0)
 
 locret_1379E:
-		rts	
+		rts
 ; End of function Sonic_Floor

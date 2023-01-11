@@ -87,7 +87,7 @@ FindFloor:
 
 @maxfloor:
 		sub.w	a3,d2
-		bsr.w	FindFloor2	; try tile above the nearest
+		bsr.s	FindFloor2	; try tile above the nearest
 		add.w	a3,d2
 		subi.w	#$10,d1		; return distance to floor
 		rts

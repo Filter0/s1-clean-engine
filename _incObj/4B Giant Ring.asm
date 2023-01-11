@@ -25,7 +25,7 @@ GRing_Main:	; Routine 0
 		beq.w	GRing_Delete	; if yes, branch
 		cmpi.w	#50,(v_rings).w	; do you have at least 50 rings?
 		bcc.s	GRing_Okay	; if yes, branch
-		rts	
+		rts
 ; ===========================================================================
 
 GRing_Okay:
@@ -42,7 +42,7 @@ GRing_Animate:	; Routine 2
 
 GRing_Collect:	; Routine 4
 		subq.b	#2,obRoutine(a0)
-		move.b	#0,obColType(a0)
+		clr.b	obColType(a0)
 		bsr.w	FindFreeObj
 		bne.s	GRing_PlaySnd
 		move.b	#id_RingFlash,0(a1) ; load giant ring flash object
@@ -56,7 +56,7 @@ GRing_Collect:	; Routine 4
 
 GRing_PlaySnd:
 		move.w	#sfx_GiantRing,d0
-		jsr	(PlaySound_Special).l	; play giant ring sound
+		bsr.w	PlaySound_Special	; play giant ring sound
 		bra.s	GRing_Animate
 ; ===========================================================================
 

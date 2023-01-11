@@ -5,10 +5,11 @@ BGHZ_MakeBall:
 		bsr.w	BossMove
 		cmpi.w	#$2A00,$30(a0)
 		bne.s	loc_17916
-		move.w	#0,obVelX(a0)
-		move.w	#0,obVelY(a0)
+		moveq   #0,d0
+		move.w	d0,obVelX(a0)
+		move.w	d0,obVelY(a0)
 		addq.b	#2,ob2ndRout(a0)
-		jsr	(FindNextFreeObj).l
+		bsr.w	FindNextFreeObj
 		bne.s	loc_17910
 		move.b	#id_BossBall,0(a1) ; load swinging ball object
 		move.w	$30(a0),obX(a1)
@@ -110,7 +111,7 @@ loc_179DA:
 loc_179E0:
 		clr.w	obVelY(a0)
 		move.w	#bgm_GHZ,d0
-		jsr	(PlaySound).l		; play GHZ music
+		jsr	(PlaySound).w		; play GHZ music
 
 loc_179EE:
 		bsr.w	BossMove
@@ -136,7 +137,7 @@ loc_17A16:
 ; ===========================================================================
 
 BGHZ_ShipDel:
-		jmp	(DeleteObject).l
+		bra.w	DeleteObject
 ; ===========================================================================
 
 BGHZ_FaceMain:	; Routine 4
@@ -182,7 +183,7 @@ BGHZ_FaceDisp:
 ; ===========================================================================
 
 BGHZ_FaceDel:
-		jmp	(DeleteObject).l
+		bra.w	DeleteObject
 ; ===========================================================================
 
 BGHZ_FlameMain:	; Routine 6
@@ -206,7 +207,7 @@ BGHZ_FlameDisp:
 ; ===========================================================================
 
 BGHZ_FlameDel:
-		jmp	(DeleteObject).l
+		bra.w	DeleteObject
 ; ===========================================================================
 
 BGHZ_Display:
@@ -215,9 +216,9 @@ BGHZ_Display:
 		move.w	obY(a1),obY(a0)
 		move.b	obStatus(a1),obStatus(a0)
 		lea	Ani_Eggman(pc),a1
-		jsr	(AnimateSprite).l
+		bsr.w	AnimateSprite
 		move.b	obStatus(a0),d0
 		andi.b	#3,d0
 		andi.b	#$FC,obRender(a0)
 		or.b	d0,obRender(a0)
-		jmp	(DisplaySprite).l
+		bra.w	DisplaySprite

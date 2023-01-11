@@ -269,7 +269,7 @@ RLoss_Bounce:	; Routine 2
 
 RLoss_Collect:	; Routine 4
 		addq.b	#2,obRoutine(a0)
-		move.b	#0,obColType(a0)
+		clr.b	obColType(a0)
 		move.b	#1,obPriority(a0)
 		bsr.w	CollectRing
 

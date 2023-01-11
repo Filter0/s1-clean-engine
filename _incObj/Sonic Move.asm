@@ -133,7 +133,7 @@ loc_12FEA:
 
 loc_12FEE:
 		move.b	obAngle(a0),d0
-		jsr	CalcSine(pc)
+		bsr.w	CalcSine
 		muls.w	obInertia(a0),d1
 		asr.l	#8,d1
 		move.w	d1,obVelX(a0)
@@ -237,7 +237,7 @@ loc_130BA:
 		move.b	#id_Stop,obAnim(a0) ; use "stopping" animation
 		bclr	#0,obStatus(a0)
 		move.w	#sfx_Skid,d0
-		jmp	PlaySound_Special(pc)	; play stopping sound
+		bra.w	PlaySound_Special	; play stopping sound
 
 locret_130E8:
 		rts
@@ -283,7 +283,7 @@ loc_13120:
 		move.b	#id_Stop,obAnim(a0) ; use "stopping" animation
 		bset	#0,obStatus(a0)
 		move.w	#sfx_Skid,d0
-		jmp	PlaySound_Special(pc)	; play stopping sound
+		bra.w	PlaySound_Special	; play stopping sound
 
 locret_1314E:
 		rts

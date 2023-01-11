@@ -8,10 +8,10 @@ Prison:
 		move.w	Pri_Index(pc,d0.w),d1
 		jsr	Pri_Index(pc,d1.w)
 		out_of_range.s	@delete
-		jmp	DisplaySprite(pc)
+		bra.w	DisplaySprite
 
 	@delete:
-		jmp	DeleteObject(pc)
+		bra.w	DeleteObject
 ; ===========================================================================
 Pri_Index:	dc.w Pri_Main-Pri_Index
 		dc.w Pri_BodyMain-Pri_Index
@@ -60,7 +60,7 @@ Pri_BodyMain:	; Routine 2
 		moveq	#$18,d2
 		moveq	#$18,d3
 		move.w	obX(a0),d4
-		jmp	SolidObject(pc)
+		bra.w	SolidObject
 ; ===========================================================================
 
 @chkopened:
@@ -80,9 +80,9 @@ Pri_Switched:	; Routine 4
 		moveq	#8,d2
 		moveq	#8,d3
 		move.w	obX(a0),d4
-		jsr	SolidObject(pc)
+		bsr.w	SolidObject
 		lea	Ani_Pri(pc),a1
-		jsr	AnimateSprite(pc)
+		bsr.w	AnimateSprite
 		move.w	pri_origY(a0),obY(a0)
 		tst.b	ob2ndRout(a0)	; has prison already been opened?
 		beq.s	@open2		; if yes, branch
@@ -106,7 +106,7 @@ Pri_Explosion:	; Routine 6, 8, $A
 		moveq	#7,d0
 		and.b	(v_vbla_byte).w,d0
 		bne.s	@noexplosion
-		jsr	FindFreeObj(pc)
+		bsr.w	FindFreeObj
 		bne.s	@noexplosion
 		move.b	#id_ExplosionBomb,0(a1) ; load explosion object
 		move.w	obX(a0),obX(a1)
@@ -138,7 +138,7 @@ Pri_Explosion:	; Routine 6, 8, $A
 		moveq	#-$1C,d4
 
 	@loop:
-		jsr	FindFreeObj(pc)
+		bsr.w	FindFreeObj
 		bne.s	@fail
 		move.b	#id_Animals,0(a1) ; load animal object
 		move.w	obX(a0),obX(a1)
@@ -157,7 +157,7 @@ Pri_Animals:	; Routine $C
 		moveq	#7,d0
 		and.b	(v_vbla_byte).w,d0
 		bne.s	@noanimal
-		jsr	FindFreeObj(pc)
+		bsr.w	FindFreeObj
 		bne.s	@noanimal
 		move.b	#id_Animals,0(a1) ; load animal object
 		move.w	obX(a0),obX(a1)
@@ -196,7 +196,7 @@ Pri_EndAct:	; Routine $E
 		dbf	d0,@findanimal	; repeat $3E times
 
 		jsr	(GotThroughAct).l
-		jmp	DeleteObject(pc)
+		bra.w	DeleteObject
 
 	@found:
 		rts

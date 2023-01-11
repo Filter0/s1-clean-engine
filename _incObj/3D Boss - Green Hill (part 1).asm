@@ -26,7 +26,7 @@ BGHZ_Main:	; Routine 0
 ; ===========================================================================
 
 BGHZ_Loop:
-		jsr	FindNextFreeObj(pc)
+		bsr.w	FindNextFreeObj
 		bne.s	loc_17772
 
 BGHZ_LoadBoss:
@@ -55,12 +55,12 @@ BGHZ_ShipMain:	; Routine 2
 		move.w	BGHZ_ShipIndex(pc,d0.w),d1
 		jsr	BGHZ_ShipIndex(pc,d1.w)
 		lea	Ani_Eggman(pc),a1
-		jsr	(AnimateSprite).l
+		bsr.w	AnimateSprite
 		move.b	obStatus(a0),d0
 		andi.b	#3,d0
 		andi.b	#$FC,obRender(a0)
 		or.b	d0,obRender(a0)
-		jmp	(DisplaySprite).l
+		bra.w	DisplaySprite
 ; ===========================================================================
 BGHZ_ShipIndex:	dc.w BGHZ_ShipStart-BGHZ_ShipIndex
 		dc.w BGHZ_MakeBall-BGHZ_ShipIndex
@@ -76,12 +76,12 @@ BGHZ_ShipStart:
 		bsr.w	BossMove
 		cmpi.w	#$338,$38(a0)
 		bne.s	loc_177E6
-		move.w	#0,obVelY(a0)	; stop ship
+		clr.w	obVelY(a0)	; stop ship
 		addq.b	#2,ob2ndRout(a0) ; goto next routine
 
 loc_177E6:
 		move.b	$3F(a0),d0
-		jsr	(CalcSine).l
+		jsr	(CalcSine).w
 		asr.w	#6,d0
 		add.w	$38(a0),d0
 		move.w	d0,obY(a0)
@@ -97,7 +97,7 @@ loc_177E6:
 		bne.s	BGHZ_ShipFlash
 		move.b	#$20,$3E(a0)	; set number of	times for ship to flash
 		move.w	#sfx_HitBoss,d0
-		jsr	(PlaySound_Special).l	; play boss damage sound
+		jsr	(PlaySound_Special).w	; play boss damage sound
 
 BGHZ_ShipFlash:
 		lea	(v_pal_dry+$22).w,a1 ; load 2nd pallet, 2nd entry

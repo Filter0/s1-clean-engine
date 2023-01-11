@@ -53,7 +53,7 @@ Bonus_Main:	; Routine 0
 		rts
 
 	@delete:
-		jmp	DeleteObject(pc)
+		bra.w	DeleteObject
 
 ; ===========================================================================
 @points:	dc.w 0			; Bonus	points array
@@ -66,7 +66,7 @@ Bonus_Display:	; Routine 2
 		subq.w	#1,bonus_timelen(a0) ; decrement display time
 		bmi.s	Bonus_Display_Delete		; if time is zero, branch
 		out_of_range.s	Bonus_Display_Delete
-		jmp	DisplaySprite(pc)
+		bra.w	DisplaySprite
 
 Bonus_Display_Delete:
-		jmp	DeleteObject(pc)
+		bra.w	DeleteObject

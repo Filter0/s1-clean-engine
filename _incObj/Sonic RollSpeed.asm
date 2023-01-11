@@ -57,7 +57,7 @@ loc_131AA:
 
 loc_131CC:
 		move.b	obAngle(a0),d0
-		jsr	CalcSine(pc)
+		bsr.w	CalcSine
 		muls.w	obInertia(a0),d0
 		asr.l	#8,d0
 		move.w	d0,obVelY(a0)

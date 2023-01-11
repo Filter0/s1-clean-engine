@@ -252,11 +252,10 @@ SetupValues:	dc.w $8000		; VDP register start number
 ; ===========================================================================
 
 GameProgram:
-		tst.w	(vdp_control_port).l
 		btst	#6,($A1000D).l
 		beq.s	CheckSumCheck
-		cmpi.l	#'init',(v_init).w ; has checksum routine already run?
-		beq.s	GameInit	; if yes, branch
+		tst.b	(v_init).w ; has checksum routine already run?
+		bne.s	GameInit	; if yes, branch
 
 CheckSumCheck:
 		lea	(v_systemstack).w,a6
@@ -269,7 +268,7 @@ CheckSumCheck:
 		move.b	(z80_version).l,d0
 		andi.b	#$C0,d0
 		move.b	d0,(v_megadrive).w ; get region setting
-		move.l	#'init',(v_init).w ; set flag so checksum won't run again
+		move.b	#1,(v_init).w ; set flag so checksum won't run again
 
 GameInit:
 		lea	($FF0000).l,a6
@@ -602,8 +601,7 @@ VDPSetupGame:
 		move.w	(a2)+,(a0)
 		dbf	d7,@setreg	; set the VDP registers
 
-		move.w	(VDPSetupArray+2).l,d0
-		move.w	d0,(v_vdp_buffer1).w
+		move.w	(VDPSetupArray+2).l,(v_vdp_buffer1).w
 		move.w	#$8A00+223,(v_hbla_hreg).w	; H-INT every 224th scanline
 		moveq	#0,d0
 		move.l	#$C0000000,(vdp_control_port).l ; set VDP to CRAM write
@@ -2190,6 +2188,7 @@ Level_TtlCardLoop:
 		bsr.w	LevelSizeLoad
 		bsr.w	DeformLayers
 		bset	#2,(v_fg_scroll_flags).w
+		bsr.w   LoadZoneTiles
 		bsr.w	LevelDataLoad ; load block mappings and palettes
 		bsr.w	LoadTilesFromStart
 		bsr.w	ColIndexLoad
@@ -2969,6 +2968,26 @@ locj_72da:
 		bra.w	DrawBlocks_LR_3
 locj_72EE:
 		rts
+		
+; ---------------------------------------------------------------------------
+; Subroutine to load level art patterns
+; ---------------------------------------------------------------------------
+
+; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
+
+LoadZoneTiles:
+		moveq	#0,d0			; Clear d0
+		move.b	(v_zone).w,d0		; Load number of current zone to d0
+		lsl.w	#4,d0			; Multiply by $10, converting the zone ID into an offset
+		lea	(LevelHeaders).l,a2	; Load LevelHeaders's address into a2
+		lea	(a2,d0.w),a2		; Offset LevelHeaders by the zone-offset, and load the resultant address to a2
+		movea.l	(a2)+,a0		; Move the first longword of data that a2 points to to a0
+		locVRAM 0                       ; Get VRAM position
+		bsr.w	NemDec                  ; decompress
+		move.b	#$C,(v_vbla_routine).w
+		bsr.w	WaitForVBla
+		bra.w   RunPLC
+; End of function LoadZoneTiles
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to load basic level data
@@ -2984,9 +3003,7 @@ LevelDataLoad:
 		lea	(LevelHeaders).l,a2
 		lea	(a2,d0.w),a2
 		move.l	a2,-(sp)
-                movea.l (a2)+,a0 ; move art from a2 to a0
-                locVRAM 0 ; get vram location to load to
-		bsr.w   NemDec ; decompress the nemesis art
+                addq.l  #4,a2
 		movea.l	(a2)+,a0
 		lea	(v_16x16).w,a1	; RAM address for 16x16 mappings
 		moveq	#0,d0
@@ -3329,7 +3346,7 @@ loc_84EE:
 
 loc_84F2:
 		move.w	#sfx_Collapse,d0
-		jmp	(PlaySound_Special).l	; play collapsing sound
+		bra.w	PlaySound_Special	; play collapsing sound
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Disintegration data for collapsing ledges (MZ, SLZ, SBZ)

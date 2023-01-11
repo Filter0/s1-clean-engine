@@ -11,7 +11,7 @@ Sonic_RollRepel:
 		cmpi.b	#-$40,d0
 		bcc.s	locret_13544
 		move.b	obAngle(a0),d0
-		jsr	CalcSine(pc)
+		bsr.w	CalcSine
 		muls.w	#$50,d0
 		asr.l	#8,d0
 		tst.w	obInertia(a0)
